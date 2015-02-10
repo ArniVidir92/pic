@@ -1,4 +1,4 @@
-package com.development.napptime.pix;
+package com.development.napptime.ivanfikt;
 
 import java.util.Locale;
 
@@ -115,7 +115,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentPagerAdapter{
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -125,20 +125,15 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            Fragment fragment = null;
-            if(position == 0)
-            {
-                fragment = new FragmentGroups();
-            }
-            else if(position == 1)
+           Fragment fragment = null;
+            if(position == 1)
             {
                 fragment = new FragmentCamera();
+                return fragment;
             }
-            else if(position == 2)
-            {
-                fragment = new FragmentDiscover();
-            }
+            fragment = new FragmentDiscover();
             return fragment;
+
         }
 
         @Override

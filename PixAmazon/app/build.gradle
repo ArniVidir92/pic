@@ -1,0 +1,41 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 20
+    buildToolsVersion '20.0.0'
+
+    defaultConfig {
+        applicationId "com.development.napptime.pix"
+        minSdkVersion 15
+        targetSdkVersion 20
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:support-v13:21.0.3'
+    compile 'com.android.support:support-v4:21.0.3'
+    compile 'com.amazonaws:aws-android-sdk-core:2.1.8'
+    compile 'com.amazonaws:aws-android-sdk-s3:2.1.8'
+    compile 'com.amazonaws:aws-android-sdk-autoscaling:2.1.8'
+    compile 'com.amazonaws:aws-android-sdk-cloudwatch:2.1.8'
+    compile 'com.amazonaws:aws-android-sdk-cognito:2.1.8'
+    compile 'com.amazonaws:aws-android-sdk-ddb:2.1.8'
+    compile 'com.amazonaws:aws-android-sdk-ddb-mapper:2.1.8'
+    compile 'com.amazonaws:aws-android-sdk-ec2:2.1.8'
+    compile 'com.amazonaws:aws-android-sdk-elb:2.1.8'
+    compile 'com.amazonaws:aws-android-sdk-kinesis:2.1.8'
+    compile 'com.amazonaws:aws-android-sdk-sdb:2.1.8'
+    compile 'com.amazonaws:aws-android-sdk-ses:2.1.8'
+    compile 'com.amazonaws:aws-android-sdk-sns:2.1.8'
+    compile 'com.amazonaws:aws-android-sdk-sqs:2.1.8'
+    compile 'com.amazonaws:aws-android-sdk-mobileanalytics:2.1.8'
+}

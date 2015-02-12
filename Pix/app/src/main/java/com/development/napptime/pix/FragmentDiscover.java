@@ -32,7 +32,31 @@ public class FragmentDiscover extends Fragment
                 "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
                 "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
                 "Android", "iPhone", "WindowsMobile" };
+        //ListView list;
+        String[] titles = {
+                "TheBoyZ",
+                "BigBangTheory",
+                "Family Vacation",
+                "Public"
+        } ;
 
+        String[] comments = {
+                "It's just monkey business",
+                "The big bang theory cast",
+                "Silly vacation photos",
+                "Everyone can vote, everyone can participate"
+        } ;
+
+        Integer[] imageId = {
+                R.drawable.samplepic1,
+                R.drawable.samplepic2,
+                R.drawable.samplepic3,
+                R.drawable.samplepic4
+        };
+
+        ListView list = (ListView) view.findViewById(R.id.groupList);
+        groupListAdapter cus = new groupListAdapter(getActivity(),titles, comments,imageId);
+        list.setAdapter(cus);
 
         return view;
     }

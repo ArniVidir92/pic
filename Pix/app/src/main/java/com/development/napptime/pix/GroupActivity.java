@@ -37,7 +37,7 @@ public class GroupActivity extends Activity {
         };
 
         ListView list = (ListView) findViewById(R.id.list);
-        groupPhotoList cus = new groupPhotoList(this,titles, comments,imageId);
+        groupPhotoListAdapter cus = new groupPhotoListAdapter(this,titles, comments,imageId);
         list.setAdapter(cus);
     }
 

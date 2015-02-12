@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/groupListPhoto"
+        android:src="@drawable/ic_launcher"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Group Name"
+        android:id="@+id/groupListTitle"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/groupListPhoto"
+        android:layout_toEndOf="@+id/groupListPhoto" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Some info about the group maybe?"
+        android:id="@+id/groupListSubTitle"
+        android:layout_below="@+id/groupListTitle"
+        android:layout_toRightOf="@+id/groupListPhoto"
+        android:layout_toEndOf="@+id/groupListPhoto" />
+</RelativeLayout>

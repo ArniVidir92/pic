@@ -14,11 +14,23 @@ android:layout_height="match_parent">
 
     <ImageButton
         android:background="@drawable/camerabutton"
-        android:id="@+id/btnOne"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/btnTakePic"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
         android:layout_gravity="bottom|center"
-        android:enabled="false">
+        android:enabled="false"
+        android:layout_marginBottom="10dp">
+    </ImageButton>
+
+    <ImageButton
+        android:background="@drawable/camerabutton"
+        android:id="@+id/btnCameraSwitch"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_gravity="bottom|right"
+        android:enabled="false"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp">
     </ImageButton>
 
 </FrameLayout>

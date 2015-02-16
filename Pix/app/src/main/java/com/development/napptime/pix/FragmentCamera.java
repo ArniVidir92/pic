@@ -33,6 +33,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
     private SurfaceHolder previewHolder = null;
     private Camera camera = null;
     private ImageButton takePicture;
+    private ImageButton switchCamera;
     private boolean isPreviewOn = false;
     private boolean cameraReady = false;
 
@@ -64,7 +65,9 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             }
         }
 
-        takePicture = (ImageButton) view.findViewById(R.id.btnOne);
+        takePicture = (ImageButton) view.findViewById(R.id.btnTakePic);
+        switchCamera = (ImageButton) view.findViewById(R.id.btnCameraSwitch);
+
 
         takePicture.setOnClickListener(new View.OnClickListener() {
 
@@ -74,9 +77,34 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             }
         });
 
+        switchCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isPreviewOn) {
+                    camera.stopPreview();
+                }
+                camera.release();
+
+                if(defaultCameraId == Camera.CameraInfo.CAMERA_FACING_BACK){
+                    defaultCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
+                }
+                else {
+                    defaultCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
+                }
+                camera = Camera.open(defaultCameraId);
+
+                setCameraDisplayOrientation(getActivity(), defaultCameraId, camera);
+                try {
+
+                    camera.setPreviewDisplay(previewHolder);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                camera.startPreview();
+            }
+        });
         return view;
     }
-
 
     @Override
     public void onResume() {
@@ -102,7 +130,6 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
     public void takePicture(View v) {
         camera.takePicture(this, null, null, this);
     }
-
 
     @Override
     public void onShutter() {

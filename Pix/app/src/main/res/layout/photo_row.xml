@@ -6,11 +6,13 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="00dp"
         android:id="@+id/photoListPhoto"
         android:src="@drawable/ic_launcher"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -19,8 +21,7 @@
         android:text="Medium Text"
         android:id="@+id/photoListTitle"
         android:layout_below="@+id/photoListPhoto"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,5 +30,6 @@
         android:text="Small Text"
         android:id="@+id/photoListSubTitle"
         android:layout_below="@+id/photoListTitle"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"/>
 </RelativeLayout>

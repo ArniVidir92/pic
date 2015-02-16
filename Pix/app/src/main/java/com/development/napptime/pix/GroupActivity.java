@@ -1,6 +1,8 @@
 package com.development.napptime.pix;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,25 +21,29 @@ public class GroupActivity extends Activity {
                 "Lakehunting",
                 "Sunrise",
                 "Toon world",
-                "AAABB Startx9 helix fossil"
+                "AAABB Startx9 helix fossil",
+                "My house"
         } ;
 
         String[] comments = {
                 "Uploaded by John whiskers - 4.65 stars",
                 "Uploaded by Solomon - 3.76 stars",
                 "Uploaded by Maximillion Pegasus - 4.2 stars",
-                "uploaded by Twitch - 3.7 stars"
+                "Uploaded by Twitch - 3.7 stars",
+                "Uploaded by Steve - 2.4 stars"
         } ;
 
-        Integer[] imageId = {
-                R.drawable.samplepic1,
-                R.drawable.samplepic2,
-                R.drawable.samplepic3,
-                R.drawable.samplepic4
+        Bitmap[] bitmaps = {
+                BitmapFactory.decodeResource(getResources(), R.drawable.samplepic1),
+                BitmapFactory.decodeResource(getResources(), R.drawable.samplepic2),
+                BitmapFactory.decodeResource(getResources(), R.drawable.samplepic3),
+                BitmapFactory.decodeResource(getResources(), R.drawable.samplepic4),
+                BitmapFactory.decodeResource(getResources(), R.drawable.samplepic5)
         };
 
         ListView list = (ListView) findViewById(R.id.list);
-        groupPhotoListAdapter cus = new groupPhotoListAdapter(this,titles, comments,imageId);
+        groupPhotoListAdapter cus = new groupPhotoListAdapter(this,titles, comments,bitmaps);
+        cus.setSizes(200, 200);
         list.setAdapter(cus);
     }
 
@@ -59,5 +65,12 @@ public class GroupActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ListView list = (ListView) findViewById(R.id.list);
+        list.setAdapter(null);
     }
 }

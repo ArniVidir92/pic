@@ -2,6 +2,7 @@ package com.development.napptime.pix;
 
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +18,18 @@ public class groupPhotoListAdapter extends ArrayAdapter<String>{
     private final Activity context;
     private final String[] titles;
     private final String[] comments;
-    private final Integer[] imageId;
+    private final Bitmap[] bitmap;
+    private int width;
+    private int height;
     public groupPhotoListAdapter(Activity context,
-                                 String[] titles, String[] comments, Integer[] imageId) {
+                                 String[] titles, String[] comments, Bitmap[] bitmap) {
         super(context, R.layout.photo_row, titles);
         this.context = context;
         this.titles = titles;
         this.comments = comments;
-        this.imageId = imageId;
+        this.bitmap = bitmap;
+        this.width = 10;
+        this.height = 10;
     }
     @Override
     public View getView(int position, View view, ViewGroup parent) {
@@ -35,7 +40,15 @@ public class groupPhotoListAdapter extends ArrayAdapter<String>{
         ImageView imageView = (ImageView) rowView.findViewById(R.id.photoListPhoto);
         txtTitle.setText(titles[position]);
         txtComment.setText(comments[position]);
-        //imageView.setImageResource(imageId[position]);
+        Bitmap resized = Bitmap.createScaledBitmap(bitmap[position], width, height, true);
+        imageView.setImageBitmap(resized);
         return rowView;
+    }
+
+
+    public void setSizes(int w, int h)
+    {
+        this.width = w;
+        this.height = h;
     }
 }

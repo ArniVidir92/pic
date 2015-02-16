@@ -12,12 +12,13 @@ android:layout_height="match_parent">
         android:layout_height="fill_parent">
     </SurfaceView>
 
-    <Button
-        android:text="Button"
+    <ImageButton
+        android:background="@drawable/camerabutton"
         android:id="@+id/btnOne"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center">
-    </Button>
+        android:layout_gravity="bottom|center"
+        android:enabled="false">
+    </ImageButton>
 
 </FrameLayout>

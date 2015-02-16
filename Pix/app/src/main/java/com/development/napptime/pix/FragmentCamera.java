@@ -13,7 +13,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.File;
@@ -32,7 +32,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
     private SurfaceView preview = null;
     private SurfaceHolder previewHolder = null;
     private Camera camera = null;
-    private Button takePicture;
+    private ImageButton takePicture;
     private boolean isPreviewOn = false;
     private boolean cameraReady = false;
 
@@ -44,7 +44,6 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_camera, container, false);
-
 
         super.onCreate(savedInstanceState);
 
@@ -65,7 +64,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             }
         }
 
-        takePicture = (Button) view.findViewById(R.id.btnOne);
+        takePicture = (ImageButton) view.findViewById(R.id.btnOne);
 
         takePicture.setOnClickListener(new View.OnClickListener() {
 

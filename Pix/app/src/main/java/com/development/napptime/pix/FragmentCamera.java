@@ -32,11 +32,15 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
     private SurfaceView preview = null;
     private SurfaceHolder previewHolder = null;
     private Camera camera = null;
+
+    //Button that lets the user take pictures
     private ImageButton takePicture;
+    //Button that lets the user switch between front facing and rear facing cameras
     private ImageButton switchCamera;
+
+    //We need to know if the preview is on and if the camera is ready
     private boolean isPreviewOn = false;
     private boolean cameraReady = false;
-
 
     // Default camera id (rear facing)
     int defaultCameraId;
@@ -48,7 +52,11 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
 
         super.onCreate(savedInstanceState);
 
+
         preview = (SurfaceView) view.findViewById(R.id.preview);
+
+        //callback so we are notified when the underlying
+        //surface is created and destroyed
         preview.getHolder().addCallback(surfaceCallback);
         previewHolder = preview.getHolder();
         previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -65,10 +73,11 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             }
         }
 
+        //Our buttons
         takePicture = (ImageButton) view.findViewById(R.id.btnTakePic);
         switchCamera = (ImageButton) view.findViewById(R.id.btnCameraSwitch);
 
-
+        //When clicked: take picture
         takePicture.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -77,22 +86,28 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             }
         });
 
+        //When clicked: switch cameras
         switchCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //We stop the preview before anything else
                 if (isPreviewOn) {
                     camera.stopPreview();
                 }
                 camera.release();
 
+                //We change the defaultCameraId to the one not currently
+                //active
                 if(defaultCameraId == Camera.CameraInfo.CAMERA_FACING_BACK){
                     defaultCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
                 }
                 else {
                     defaultCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
                 }
+                //Open the camera again with the new defaultCameraId
                 camera = Camera.open(defaultCameraId);
 
+                //Reconfigure displayOrientation
                 setCameraDisplayOrientation(getActivity(), defaultCameraId, camera);
                 try {
 
@@ -100,6 +115,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                //Start the preview
                 camera.startPreview();
             }
         });
@@ -119,7 +135,6 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         if (isPreviewOn) {
             camera.stopPreview();
         }
-
         camera.release();
         camera = null;
         isPreviewOn = false;
@@ -127,6 +142,9 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         super.onPause();
     }
 
+    //Take a picture of the surfaceView
+    //Need to wait for the shutter- and pictureCallbacks to provide
+    //the actual image data
     public void takePicture(View v) {
         camera.takePicture(this, null, null, this);
     }
@@ -136,23 +154,28 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         Toast.makeText(getActivity(), "Clickity clack!", Toast.LENGTH_SHORT).show();
     }
 
+    //When a picture is taken save it locally in Documents (for now)
     @Override
     public void onPictureTaken(byte[] data, Camera camera) {
 
+        //Use the picture date to provide each .jpg file with
+        //a unique name
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
         Date date = new Date();
         String fileName = "Image-" + dateFormat.format(date) + ".jpg";
 
+        //Decode the data to a bitmap
         Bitmap myImage = BitmapFactory.decodeByteArray(data , 0, data.length);
+
+        //Store pictures in Documents
         File folder = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DOCUMENTS);
-
         File pictureFile = new File(folder, fileName);
         if (pictureFile.exists ()) pictureFile.delete ();
+
+        //Output the file
         FileOutputStream fop = null;
-
         try {
-
             fop = new FileOutputStream(pictureFile);
             myImage.compress(Bitmap.CompressFormat.JPEG, 80, fop);
             fop.flush();
@@ -165,6 +188,8 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         camera.startPreview();
     }
 
+    //Get the best previewSize for our device, needs further configuration
+    //Work in progress.
     private Camera.Size getBestPreviewSize(int width, int height, Camera.Parameters parameters) {
 
         Camera.Size result = null;
@@ -189,6 +214,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         return result;
     }
 
+    //Initiate our preview
     private void initPreview(int width, int height) {
         if (camera != null && previewHolder.getSurface() != null) {
             try {
@@ -197,9 +223,11 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
                 e.printStackTrace();
             }
 
+            //If it's not ready get get our camera parameters and
+            //then set the camera as ready
             if (!cameraReady) {
                 Camera.Parameters parameters = camera.getParameters();
-                Camera.Size size = getBestPreviewSize(width, height, parameters);
+                Camera.Size size = getBestPreviewSize(width, height, camera.getParameters());
 
                 if (size != null) {
                     parameters.setPreviewSize(size.width, size.height);
@@ -217,6 +245,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         }
     }
 
+    //Configures the camera orientation
     public static void setCameraDisplayOrientation(Activity activity, int cameraId,
                                                    android.hardware.Camera camera) {
 
@@ -247,6 +276,13 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
 
     SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
         public void surfaceCreated(SurfaceHolder holder) {
+            //When the surface is ready get the camera
+            //and tell it where to draw
+            try {
+                camera.setPreviewDisplay(holder);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         public void surfaceChanged(SurfaceHolder holder, int format, int width,
@@ -257,6 +293,10 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         }
 
         public void surfaceDestroyed(SurfaceHolder holder) {
+            //Destroy the surface when we return and stop the preview
+            if (camera !=null) {
+                camera.stopPreview();
+            }
         }
     };
 }

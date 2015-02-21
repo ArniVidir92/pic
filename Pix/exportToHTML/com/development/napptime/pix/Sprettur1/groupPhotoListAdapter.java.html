@@ -1,0 +1,77 @@
+<html>
+<head>
+<title>groupPhotoListAdapter.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+groupPhotoListAdapter.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<a name="l1"><span class="ln">1    </span></a><span class="s0">package </span><span class="s1">com.development.napptime.pix; 
+<a name="l2"><span class="ln">2    </span></a> 
+<a name="l3"><span class="ln">3    </span></a> 
+<a name="l4"><span class="ln">4    </span></a></span><span class="s0">import </span><span class="s1">android.app.Activity; 
+<a name="l5"><span class="ln">5    </span></a></span><span class="s0">import </span><span class="s1">android.graphics.Bitmap; 
+<a name="l6"><span class="ln">6    </span></a></span><span class="s0">import </span><span class="s1">android.view.LayoutInflater; 
+<a name="l7"><span class="ln">7    </span></a></span><span class="s0">import </span><span class="s1">android.view.View; 
+<a name="l8"><span class="ln">8    </span></a></span><span class="s0">import </span><span class="s1">android.view.ViewGroup; 
+<a name="l9"><span class="ln">9    </span></a></span><span class="s0">import </span><span class="s1">android.widget.ArrayAdapter; 
+<a name="l10"><span class="ln">10   </span></a></span><span class="s0">import </span><span class="s1">android.widget.ImageView; 
+<a name="l11"><span class="ln">11   </span></a></span><span class="s0">import </span><span class="s1">android.widget.TextView; 
+<a name="l12"><span class="ln">12   </span></a> 
+<a name="l13"><span class="ln">13   </span></a></span><span class="s2">/** 
+<a name="l14"><span class="ln">14   </span></a> * Created by Napptime on 2/10/15. 
+<a name="l15"><span class="ln">15   </span></a> */</span><span class="s1"> 
+<a name="l16"><span class="ln">16   </span></a> 
+<a name="l17"><span class="ln">17   </span></a></span><span class="s0">public class </span><span class="s1">groupPhotoListAdapter </span><span class="s0">extends </span><span class="s1">ArrayAdapter&lt;String&gt;{ 
+<a name="l18"><span class="ln">18   </span></a>    </span><span class="s0">private final </span><span class="s1">Activity context; 
+<a name="l19"><span class="ln">19   </span></a>    </span><span class="s0">private final </span><span class="s1">String[] titles; 
+<a name="l20"><span class="ln">20   </span></a>    </span><span class="s0">private final </span><span class="s1">String[] comments; 
+<a name="l21"><span class="ln">21   </span></a>    </span><span class="s0">private final </span><span class="s1">Bitmap[] bitmap; 
+<a name="l22"><span class="ln">22   </span></a>    </span><span class="s0">private int </span><span class="s1">width; 
+<a name="l23"><span class="ln">23   </span></a>    </span><span class="s0">private int </span><span class="s1">height; 
+<a name="l24"><span class="ln">24   </span></a>    </span><span class="s0">public </span><span class="s1">groupPhotoListAdapter(Activity context, 
+<a name="l25"><span class="ln">25   </span></a>                                 String[] titles, String[] comments, Bitmap[] bitmap) { 
+<a name="l26"><span class="ln">26   </span></a>        </span><span class="s0">super</span><span class="s1">(context, R.layout.photo_row, titles); 
+<a name="l27"><span class="ln">27   </span></a>        </span><span class="s0">this</span><span class="s1">.context = context; 
+<a name="l28"><span class="ln">28   </span></a>        </span><span class="s0">this</span><span class="s1">.titles = titles; 
+<a name="l29"><span class="ln">29   </span></a>        </span><span class="s0">this</span><span class="s1">.comments = comments; 
+<a name="l30"><span class="ln">30   </span></a>        </span><span class="s0">this</span><span class="s1">.bitmap = bitmap; 
+<a name="l31"><span class="ln">31   </span></a>        </span><span class="s0">this</span><span class="s1">.width = </span><span class="s3">10</span><span class="s1">; 
+<a name="l32"><span class="ln">32   </span></a>        </span><span class="s0">this</span><span class="s1">.height = </span><span class="s3">10</span><span class="s1">; 
+<a name="l33"><span class="ln">33   </span></a>    } 
+<a name="l34"><span class="ln">34   </span></a>    @Override 
+<a name="l35"><span class="ln">35   </span></a>    </span><span class="s0">public </span><span class="s1">View getView(</span><span class="s0">int </span><span class="s1">position, View view, ViewGroup parent) { 
+<a name="l36"><span class="ln">36   </span></a>        LayoutInflater inflater = context.getLayoutInflater(); 
+<a name="l37"><span class="ln">37   </span></a>        View rowView= inflater.inflate(R.layout.photo_row, </span><span class="s0">null</span><span class="s1">, </span><span class="s0">true</span><span class="s1">); 
+<a name="l38"><span class="ln">38   </span></a>        TextView txtTitle = (TextView) rowView.findViewById(R.id.photoListTitle); 
+<a name="l39"><span class="ln">39   </span></a>        TextView txtComment= (TextView) rowView.findViewById(R.id.photoListSubTitle); 
+<a name="l40"><span class="ln">40   </span></a>        ImageView imageView = (ImageView) rowView.findViewById(R.id.photoListPhoto); 
+<a name="l41"><span class="ln">41   </span></a>        txtTitle.setText(titles[position]); 
+<a name="l42"><span class="ln">42   </span></a>        txtComment.setText(comments[position]); 
+<a name="l43"><span class="ln">43   </span></a>        Bitmap resized = Bitmap.createScaledBitmap(bitmap[position], width, height, </span><span class="s0">true</span><span class="s1">); 
+<a name="l44"><span class="ln">44   </span></a>        imageView.setImageBitmap(resized); 
+<a name="l45"><span class="ln">45   </span></a>        </span><span class="s0">return </span><span class="s1">rowView; 
+<a name="l46"><span class="ln">46   </span></a>    } 
+<a name="l47"><span class="ln">47   </span></a> 
+<a name="l48"><span class="ln">48   </span></a> 
+<a name="l49"><span class="ln">49   </span></a>    </span><span class="s0">public void </span><span class="s1">setSizes(</span><span class="s0">int </span><span class="s1">w, </span><span class="s0">int </span><span class="s1">h) 
+<a name="l50"><span class="ln">50   </span></a>    { 
+<a name="l51"><span class="ln">51   </span></a>        </span><span class="s0">this</span><span class="s1">.width = w; 
+<a name="l52"><span class="ln">52   </span></a>        </span><span class="s0">this</span><span class="s1">.height = h; 
+<a name="l53"><span class="ln">53   </span></a>    } 
+<a name="l54"><span class="ln">54   </span></a>} 
+<a name="l55"><span class="ln">55   </span></a></span></pre>
+</body>
+</html>

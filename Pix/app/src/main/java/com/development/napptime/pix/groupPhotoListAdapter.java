@@ -28,8 +28,6 @@ public class groupPhotoListAdapter extends ArrayAdapter<String>{
         this.titles = titles;
         this.comments = comments;
         this.bitmap = bitmap;
-        this.width = 10;
-        this.height = 10;
     }
     @Override
     public View getView(int position, View view, ViewGroup parent) {
@@ -40,15 +38,8 @@ public class groupPhotoListAdapter extends ArrayAdapter<String>{
         ImageView imageView = (ImageView) rowView.findViewById(R.id.photoListPhoto);
         txtTitle.setText(titles[position]);
         txtComment.setText(comments[position]);
-        Bitmap resized = Bitmap.createScaledBitmap(bitmap[position], width, height, true);
-        imageView.setImageBitmap(resized);
+        //Bitmap resized = Bitmap.createScaledBitmap(bitmap[position], width, height, true);
+        imageView.setImageBitmap(bitmap[position]);
         return rowView;
-    }
-
-
-    public void setSizes(int w, int h)
-    {
-        this.width = w;
-        this.height = h;
     }
 }

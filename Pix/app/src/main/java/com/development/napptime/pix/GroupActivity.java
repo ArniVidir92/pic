@@ -33,17 +33,22 @@ public class GroupActivity extends Activity {
                 "Uploaded by Steve - 2.4 stars"
         } ;
 
-        Bitmap[] bitmaps = {
-                BitmapFactory.decodeResource(getResources(), R.drawable.samplepic1),
-                BitmapFactory.decodeResource(getResources(), R.drawable.samplepic2),
-                BitmapFactory.decodeResource(getResources(), R.drawable.samplepic3),
-                BitmapFactory.decodeResource(getResources(), R.drawable.samplepic4),
-                BitmapFactory.decodeResource(getResources(), R.drawable.samplepic5)
+
+        int[] images = {
+                R.drawable.samplepic1,
+                R.drawable.samplepic2,
+                R.drawable.samplepic3,
+                R.drawable.samplepic4,
+                R.drawable.samplepic5
         };
 
+
+        Bitmap[] bitmaps = ImageHandler.decodeArrayBitmapFromResource(getResources(),images,100,100);
+
+
+
         ListView list = (ListView) findViewById(R.id.list);
-        groupPhotoListAdapter cus = new groupPhotoListAdapter(this,titles, comments,bitmaps);
-        cus.setSizes(200, 200);
+        groupPhotoListAdapter cus = new groupPhotoListAdapter(this,titles, comments, bitmaps);
         list.setAdapter(cus);
     }
 

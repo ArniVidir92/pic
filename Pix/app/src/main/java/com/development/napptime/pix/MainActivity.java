@@ -194,7 +194,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         }
     }
 
-    public void sendMessage(View view)
+    public void switchToGroupActivity(View view)
     {
         Intent i = new Intent( MainActivity.this, GroupActivity.class);
         startActivity(i);

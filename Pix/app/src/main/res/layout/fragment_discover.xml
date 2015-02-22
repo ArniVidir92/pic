@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:text="Test Group"
         android:id="@+id/buttonTestGroup"
-        android:onClick="sendMessage"
+        android:onClick="switchToGroupActivity"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true" />
 

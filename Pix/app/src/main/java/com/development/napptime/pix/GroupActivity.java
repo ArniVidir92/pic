@@ -1,12 +1,16 @@
 package com.development.napptime.pix;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 public class GroupActivity extends Activity {
@@ -25,7 +29,7 @@ public class GroupActivity extends Activity {
                 "My house"
         } ;
 
-        String[] comments = {
+        final String[] comments = {
                 "Uploaded by John whiskers - 4.65 stars",
                 "Uploaded by Solomon - 3.76 stars",
                 "Uploaded by Maximillion Pegasus - 4.2 stars",
@@ -77,5 +81,11 @@ public class GroupActivity extends Activity {
         super.onDestroy();
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(null);
+    }
+
+    public void goToPicture(View view)
+    {
+        Intent i = new Intent( this, SelectedPhotoActivity.class);
+        startActivity(i);
     }
 }

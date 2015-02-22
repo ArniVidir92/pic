@@ -3,6 +3,7 @@ package com.development.napptime.pix;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -53,6 +61,32 @@ public class FragmentDiscover extends Fragment
                 R.drawable.samplepic3,
                 R.drawable.samplepic4
         };
+
+
+        //==============================================
+        //            Test for Parse begin
+        //==============================================
+/*
+        Bitmap map = ImageHandler.decodeSampledBitmapFromResource(getResources(),R.drawable.samplepic4,100,100);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        // Compress image to lower quality scale 1 - 100
+        map.compress(Bitmap.CompressFormat.JPEG,100 ,stream );
+        byte[] image = stream.toByteArray();
+
+        // Create the ParseFile
+        ParseFile file  = new ParseFile("picture_1.jpeg", image);
+        // Upload the image into Parse Cloud
+        ParseObject obj = new ParseObject("Picture");
+        obj.put("File",file);
+        obj.put("Description","A Picture of myself");
+        obj.put("Rating",3);
+        obj.saveInBackground();
+*/
+        //==============================================
+        //            Test for Parse ends
+        //==============================================
+
+
 
         ListView list = (ListView) view.findViewById(R.id.groupList);
         groupListAdapter cus = new groupListAdapter(getActivity(),titles, comments,imageId);

@@ -42,6 +42,7 @@
         android:layout_height="wrap_content"
         android:text="Hall of fame"
         android:id="@+id/button2"
+        android:onClick="goToPicture"
         android:layout_below="@+id/textViewTitle"
         android:layout_centerHorizontal="true" />
 

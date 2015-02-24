@@ -69,7 +69,7 @@ public class FragmentDiscover extends Fragment
 /*
         Bitmap map = ImageHandler.decodeSampledBitmapFromResource(getResources(),R.drawable.samplepic4,100,100);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        // Compress image to lower quality scale 1 - 100
+        // Compress image to lower quality scale 1 - 100§
         map.compress(Bitmap.CompressFormat.JPEG,100 ,stream );
         byte[] image = stream.toByteArray();
 
@@ -78,7 +78,9 @@ public class FragmentDiscover extends Fragment
         // Upload the image into Parse Cloud
         ParseObject obj = new ParseObject("Picture");
         obj.put("File",file);
-        obj.put("Description","A Picture of myself");
+        obj.put("groupId" ,-1);
+        obj.put("Title", "Arni Vidir");
+        obj.put("Description","Uploaded by Arni Gamli");
         obj.put("Rating",3);
         obj.saveInBackground();
 */

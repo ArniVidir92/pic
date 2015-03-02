@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,6 +17,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -165,7 +170,9 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         String fileName = "Image-" + dateFormat.format(date) + ".jpg";
 
         //Decode the data to a bitmap
-        Bitmap myImage = BitmapFactory.decodeByteArray(data , 0, data.length);
+        Bitmap myImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+        Bitmap smallImage = getResizedBitmap(myImage, 300, 300);
 
         //Store pictures in Documents
         File folder = Environment.getExternalStoragePublicDirectory(
@@ -173,11 +180,28 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         File pictureFile = new File(folder, fileName);
         if (pictureFile.exists ()) pictureFile.delete ();
 
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        // Compress image to lower quality scale 1 - 100§
+        smallImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
+        byte[] image = stream.toByteArray();
+
+        //Create the ParseFile
+        ParseFile file  = new ParseFile("picture_1.jpeg", image);
+        // Upload the image into Parse Cloud
+        ParseObject obj = new ParseObject("Picture");
+        obj.put("File",file);
+        obj.put("groupId" ,-1);
+        obj.put("Title", "Arni Vidir");
+        obj.put("Description","Uploaded by Arni Gamli");
+        obj.put("Rating",3);
+        obj.saveInBackground();
+
         //Output the file
         FileOutputStream fop = null;
         try {
             fop = new FileOutputStream(pictureFile);
-            myImage.compress(Bitmap.CompressFormat.JPEG, 80, fop);
+            myImage.compress(Bitmap.CompressFormat.JPEG, 100, fop);
             fop.flush();
             fop.close();
         } catch (FileNotFoundException e) {
@@ -186,6 +210,22 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             e.printStackTrace();
         }
         camera.startPreview();
+    }
+
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        return resizedBitmap;
     }
 
     //Get the best previewSize for our device, needs further configuration

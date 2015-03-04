@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.parse.FindCallback;
@@ -22,13 +23,16 @@ import java.util.List;
 
 public class GroupActivity extends Activity {
 
-    private final int groupId = -1;
+    private final int groupId = -2;
     private final int maxPicNr = 5;
     private int numberOfPics = 0;
 
     private String[] titles;
     private String[] description;
     private Bitmap[] pictures;
+    private String[] pictureIds;
+
+    ListView list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,42 +40,7 @@ public class GroupActivity extends Activity {
         setContentView(R.layout.activity_group);
 
         getPhotos(groupId, maxPicNr, numberOfPics);
-/*
-        //ListView list;
-        String[] titles = {
-                "Lakehunting",
-                "Sunrise",
-                "Toon world",
-                "AAABB Startx9 helix fossil",
-                "My house"
-        } ;
 
-        final String[] comments = {
-                "Uploaded by John whiskers - 4.65 stars",
-                "Uploaded by Solomon - 3.76 stars",
-                "Uploaded by Maximillion Pegasus - 4.2 stars",
-                "Uploaded by Twitch - 3.7 stars",
-                "Uploaded by Steve - 2.4 stars"
-        } ;
-
-
-        int[] images = {
-                R.drawable.samplepic1,
-                R.drawable.samplepic2,
-                R.drawable.samplepic3,
-                R.drawable.samplepic4,
-                R.drawable.samplepic5
-        };
-
-
-        Bitmap[] bitmaps = ImageHandler.decodeArrayBitmapFromResource(getResources(),images,100,100);
-
-
-
-        ListView list = (ListView) findViewById(R.id.list);
-        groupPhotoListAdapter cus = new groupPhotoListAdapter(this,titles, comments, bitmaps);
-        list.setAdapter(cus);
-*/
     }
 
 
@@ -113,12 +82,28 @@ public class GroupActivity extends Activity {
         startActivity(i);
     }
 
+    public void initializeListView(){
+        list = (ListView) findViewById(R.id.list);
+        groupPhotoListAdapter cus = new groupPhotoListAdapter(this,titles, description, pictures);
+        list.setAdapter(cus);
+
+        //Button listener for a button that sends the user to Chosen contact if clicked.
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                Log.d("position","" + position);
+            }
+        });
+    }
+
     public void updatePhotos(List<ParseObject> photoList, int size) throws ParseException {
         // Temporary arrays that are used to make the titles, description and pictures arrays
         // dynamically bigger
         String[] tempTitles = new String[numberOfPics + size];
         String[] tempDscr = new String[numberOfPics + size];
         Bitmap[] tempPictures = new Bitmap[numberOfPics + size];
+        String[] tempPictureId = new String[numberOfPics + size];
         ParseObject photo;
         byte[] file;
         for (int i = 0; i < numberOfPics + size; i++) {
@@ -126,10 +111,12 @@ public class GroupActivity extends Activity {
                 tempTitles[i] = titles[i];
                 tempDscr[i] = description[i];
                 tempPictures[i] = pictures[i];
+                tempPictureId[i] = pictureIds[i];
             }else{
                 photo = photoList.get(i - numberOfPics);
                 tempTitles[i] = photo.getString("Title");
                 tempDscr[i] = photo.getString("Description") + " Rating is " + photo.getNumber("Rating");
+                tempPictureId[i] = photo.getString("objectId");
                 file = photo.getParseFile("File").getData();
                 tempPictures[i] = BitmapFactory.decodeByteArray(file, 0, file.length);
             }
@@ -139,15 +126,15 @@ public class GroupActivity extends Activity {
         titles = new String[numberOfPics];
         description = new String[numberOfPics];
         pictures = new Bitmap[numberOfPics];
+        pictureIds = new String[numberOfPics];
         for(int j = 0; j < numberOfPics; j++){
             titles[j] = tempTitles[j];
             description[j] = tempDscr[j];
             pictures[j] = tempPictures[j];
+            pictureIds[j] = tempPictureId[j];
         }
 
-        ListView list = (ListView) findViewById(R.id.list);
-        groupPhotoListAdapter cus = new groupPhotoListAdapter(this,titles, description, pictures);
-        list.setAdapter(cus);
+        initializeListView();
     }
 
     public void getPhotos( int id, int max, int skip ){

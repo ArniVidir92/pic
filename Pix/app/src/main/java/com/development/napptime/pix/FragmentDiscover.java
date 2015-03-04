@@ -67,18 +67,28 @@ public class FragmentDiscover extends Fragment
         //            Test for Parse begin
         //==============================================
 /*
+        // Make thumbnail
         Bitmap map = ImageHandler.decodeSampledBitmapFromResource(getResources(),R.drawable.samplepic4,100,100);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         // Compress image to lower quality scale 1 - 100§
         map.compress(Bitmap.CompressFormat.JPEG,100 ,stream );
         byte[] image = stream.toByteArray();
 
+        // Make full image
+        Bitmap mapFull = ImageHandler.decodeSampledBitmapFromResource(getResources(),R.drawable.samplepic4,2880,1800);
+        ByteArrayOutputStream streamFull = new ByteArrayOutputStream();
+        // Compress image to lower quality scale 1 - 100§
+        mapFull.compress(Bitmap.CompressFormat.JPEG,100 ,streamFull );
+        byte[] imageFull = streamFull.toByteArray();
+
         // Create the ParseFile
         ParseFile file  = new ParseFile("picture_1.jpeg", image);
+        ParseFile fileBig  = new ParseFile("picture_1Full.jpeg", imageFull);
         // Upload the image into Parse Cloud
         ParseObject obj = new ParseObject("Picture");
         obj.put("File",file);
-        obj.put("groupId" ,-1);
+        obj.put("FileBig", fileBig);
+        obj.put("groupId" ,-2);
         obj.put("Title", "Arni Vidir");
         obj.put("Description","Uploaded by Arni Gamli");
         obj.put("Rating",3);

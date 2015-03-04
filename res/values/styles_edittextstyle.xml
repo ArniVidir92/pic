@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="SpinnereditTextStyle" parent="android:Widget.Holo.Light.Spinner">
+      <item name="android:background">@drawable/edittextstyle_spinner_background_holo_light</item>
+      <item name="android:dropDownSelector">@drawable/edittextstyle_list_selector_holo_light</item>
+  </style>
+
+  <style name="ProgressBareditTextStyle" parent="android:Widget.Holo.Light.ProgressBar.Horizontal">
+      <item name="android:progressDrawable">@drawable/edittextstyle_progress_horizontal_holo_light</item>
+      <item name="android:indeterminateDrawable">@drawable/edittextstyle_progress_indeterminate_horizontal_holo_light</item>
+  </style>
+
+  <style name="SeekBareditTextStyle" parent="android:Widget.Holo.Light.SeekBar">
+      <item name="android:progressDrawable">@drawable/edittextstyle_scrubber_progress_horizontal_holo_light</item>
+      <item name="android:indeterminateDrawable">@drawable/edittextstyle_scrubber_progress_horizontal_holo_light</item>
+      <item name="android:thumb">@drawable/edittextstyle_scrubber_control_selector_holo_light</item>
+  </style>
+
+  <style name="RatingBareditTextStyle" parent="android:Widget.Holo.Light.RatingBar">
+      <item name="android:progressDrawable">@drawable/edittextstyle_ratingbar_full_holo_light</item>
+      <item name="android:indeterminateDrawable">@drawable/edittextstyle_ratingbar_full_holo_light</item>
+  </style>
+
+</resources>

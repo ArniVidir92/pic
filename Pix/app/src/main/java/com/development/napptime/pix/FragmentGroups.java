@@ -21,6 +21,8 @@ public class FragmentGroups extends Fragment {
         View view = inflater.inflate(R.layout.fragment_groups, container, false);
         //setContentView(R.layout.main);
 
+
+/*
         GridView gridview = (GridView) view.findViewById(R.id.gridview);
         gridview.setAdapter(new ImageAdapter(getActivity()));
 
@@ -29,6 +31,40 @@ public class FragmentGroups extends Fragment {
                 Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
             }
         });
+*/
+
+        final String[] groupNames = {
+                "Google",
+                "Ivan",
+                "Arni",
+                "Snorri",
+                "Lexi"
+        } ;
+
+        int[] imageId = {
+                R.drawable.samplepic6,
+                R.drawable.samplepic6,
+                R.drawable.samplepic6,
+                R.drawable.samplepic6,
+                R.drawable.samplepic6
+        };
+
+
+        GroupGridAdapter adapter = new GroupGridAdapter(getActivity(), groupNames, imageId);
+        GridView grid=(GridView) view.findViewById(R.id.gridview);
+        grid.setAdapter(adapter);
+        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Toast.makeText(getActivity(), "You Clicked at " +groupNames[+ position], Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+
+
         return view;
     }
 }

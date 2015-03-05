@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,32 +68,52 @@ public class FragmentDiscover extends Fragment
         //            Test for Parse begin
         //==============================================
 /*
-        // Make thumbnail
-        Bitmap map = ImageHandler.decodeSampledBitmapFromResource(getResources(),R.drawable.samplepic4,100,100);
+        // Make and upload thumbnail
+        Bitmap map = ImageHandler.decodeSampledBitmapFromResource(getResources(),R.drawable.samplepic3,100,100);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         // Compress image to lower quality scale 1 - 100§
         map.compress(Bitmap.CompressFormat.JPEG,100 ,stream );
         byte[] image = stream.toByteArray();
 
-        // Make full image
-        Bitmap mapFull = ImageHandler.decodeSampledBitmapFromResource(getResources(),R.drawable.samplepic4,2880,1800);
-        ByteArrayOutputStream streamFull = new ByteArrayOutputStream();
-        // Compress image to lower quality scale 1 - 100§
-        mapFull.compress(Bitmap.CompressFormat.JPEG,100 ,streamFull );
-        byte[] imageFull = streamFull.toByteArray();
-
         // Create the ParseFile
         ParseFile file  = new ParseFile("picture_1.jpeg", image);
-        ParseFile fileBig  = new ParseFile("picture_1Full.jpeg", imageFull);
         // Upload the image into Parse Cloud
-        ParseObject obj = new ParseObject("Picture");
-        obj.put("File",file);
-        obj.put("FileBig", fileBig);
-        obj.put("groupId" ,-2);
-        obj.put("Title", "Arni Vidir");
-        obj.put("Description","Uploaded by Arni Gamli");
-        obj.put("Rating",3);
-        obj.saveInBackground();
+        final ParseObject thumbnail = new ParseObject("Thumbnail");
+        thumbnail.put("file", file);
+        thumbnail.put("groupId", "2");
+        thumbnail.put("title", "Drasl");
+        thumbnail.put("user", "Arni Vidir");
+        thumbnail.put("description", "Ekkert rosalega fin mynd");
+        thumbnail.put("rating", 4.5);
+        thumbnail.saveInBackground(new SaveCallback () {
+            @Override
+            public void done(ParseException ex) {
+                if (ex == null) {
+                    String thumbnailId = thumbnail.getObjectId();
+
+                    // Make full image and upload
+                    Bitmap mapFull = ImageHandler.decodeSampledBitmapFromResource(getResources(),R.drawable.samplepic3,500,500);
+                    ByteArrayOutputStream streamFull = new ByteArrayOutputStream();
+                    // Compress image to lower quality scale 1 - 100§
+                    mapFull.compress(Bitmap.CompressFormat.JPEG,100 ,streamFull );
+                    byte[] imageFull = streamFull.toByteArray();
+
+
+                    ParseFile fileBig  = new ParseFile("picture_1Full.jpeg", imageFull);
+                    // Upload the image into Parse Cloud
+                    ParseObject picture = new ParseObject("Picture");
+                    picture.put("file", fileBig);
+                    picture.put("thumbnailId", thumbnailId);
+                    Log.d("thumbnailID", "" +thumbnailId);
+
+                    picture.saveInBackground();
+                } else {
+                    // Failed
+                    Log.d("Faiile", "asdfasdf");
+                }
+            }
+        });
+
 */
         //==============================================
         //            Test for Parse ends

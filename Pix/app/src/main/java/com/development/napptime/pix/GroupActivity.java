@@ -23,7 +23,7 @@ import java.util.List;
 
 public class GroupActivity extends Activity {
 
-    private final int groupId = -2;
+    private final String groupId = "2";
     private final int maxPicNr = 5;
     private int numberOfPics = 0;
 
@@ -92,7 +92,12 @@ public class GroupActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                Log.d("position","" + position);
+                Intent i = new Intent( view.getContext(), SelectedPhotoActivity.class);
+                i.putExtra("groupId", groupId);
+                i.putExtra("title", titles[position]);
+                i.putExtra("description", description[position]);
+                i.putExtra("thumbnailId", pictureIds[position]);
+                view.getContext().startActivity(i);
             }
         });
     }
@@ -114,10 +119,10 @@ public class GroupActivity extends Activity {
                 tempPictureId[i] = pictureIds[i];
             }else{
                 photo = photoList.get(i - numberOfPics);
-                tempTitles[i] = photo.getString("Title");
-                tempDscr[i] = photo.getString("Description") + " Rating is " + photo.getNumber("Rating");
-                tempPictureId[i] = photo.getString("objectId");
-                file = photo.getParseFile("File").getData();
+                tempTitles[i] = photo.getString("title");
+                tempDscr[i] = photo.getString("description") + " Rating is " + photo.getNumber("rating");
+                tempPictureId[i] = photo.getObjectId();
+                file = photo.getParseFile("file").getData();
                 tempPictures[i] = BitmapFactory.decodeByteArray(file, 0, file.length);
             }
         }
@@ -137,8 +142,8 @@ public class GroupActivity extends Activity {
         initializeListView();
     }
 
-    public void getPhotos( int id, int max, int skip ){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Picture");
+    public void getPhotos( String id, int max, int skip ){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Thumbnail");
         query.whereEqualTo("groupId", id);
         query.setLimit(max);
         query.setSkip(skip);

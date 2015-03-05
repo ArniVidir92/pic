@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -17,8 +18,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -168,11 +171,14 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
         Date date = new Date();
         String fileName = "Image-" + dateFormat.format(date) + ".jpg";
+        String bigFileName = "Big-" + fileName;
 
         //Decode the data to a bitmap
         Bitmap myImage = BitmapFactory.decodeByteArray(data, 0, data.length);
-
-        Bitmap smallImage = getResizedBitmap(myImage, 300, 300);
+        // Thumbnail
+        Bitmap smallImage = getResizedBitmap(myImage, 200, 200);
+        // Bigger image
+        Bitmap bigImage = getResizedBitmap(myImage, 500, 500);
 
         //Store pictures in Documents
         File folder = Environment.getExternalStoragePublicDirectory(
@@ -180,22 +186,8 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         File pictureFile = new File(folder, fileName);
         if (pictureFile.exists ()) pictureFile.delete ();
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        // Compress image to lower quality scale 1 - 100§
-        smallImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-
-        byte[] image = stream.toByteArray();
-
-        //Create the ParseFile
-        ParseFile file  = new ParseFile("picture_1.jpeg", image);
-        // Upload the image into Parse Cloud
-        ParseObject obj = new ParseObject("Picture");
-        obj.put("File",file);
-        obj.put("groupId" ,-1);
-        obj.put("Title", "Arni Vidir");
-        obj.put("Description","Uploaded by Arni Gamli");
-        obj.put("Rating",3);
-        obj.saveInBackground();
+        // This method uploads both a thumbnail and a big picture
+        uploadToParseCloud(smallImage, bigImage, fileName, bigFileName);
 
         //Output the file
         FileOutputStream fop = null;
@@ -339,6 +331,49 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             }
         }
     };
+    public void uploadToParseCloud(Bitmap smallImage, final Bitmap bigImage, String filename, final String bigFilename){
+        // Make thumbnail
+        ByteArrayOutputStream streamSmall = new ByteArrayOutputStream();
+        // Compress image to lower quality scale 1 - 100§
+        smallImage.compress(Bitmap.CompressFormat.JPEG, 100, streamSmall);
+
+        // Make bigger picture which we also store
+        ByteArrayOutputStream streamBig = new ByteArrayOutputStream();
+        // Compress image to lower quality scale 1 - 100§
+        bigImage.compress(Bitmap.CompressFormat.JPEG, 100, streamBig);
+
+        byte[] thumbnailPic = streamSmall.toByteArray();
+        final byte[] picture = streamBig.toByteArray();
+
+        // Create the ParseFile
+        ParseFile file  = new ParseFile(filename, thumbnailPic);
+        // Upload the image into Parse Cloud
+        final ParseObject thumbnail = new ParseObject("Thumbnail");
+        thumbnail.put("file", file);
+        thumbnail.put("groupId", "2");
+        thumbnail.put("title", "MYND");
+        thumbnail.put("user", "Arni Vidir");
+        thumbnail.put("description", "Ekkert rosalega fin mynd");
+        thumbnail.put("rating", 4.5);
+        thumbnail.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException ex) {
+                if (ex == null) {
+                    String thumbnailId = thumbnail.getObjectId();
+                    ParseFile fileBig  = new ParseFile(bigFilename, picture);
+                    // Upload the image into Parse Cloud
+                    ParseObject picture = new ParseObject("Picture");
+                    picture.put("file", fileBig);
+                    picture.put("thumbnailId", thumbnailId);
+
+                    picture.saveInBackground();
+                } else {
+                    // Failed
+                    Log.d("Faiile", "asdfasdf");
+                }
+            }
+        });
+    }
 }
 
 

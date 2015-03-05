@@ -3,6 +3,7 @@ package com.development.napptime.pix;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 /**
  * Created by Napptime on 2/21/15.
@@ -47,6 +48,9 @@ public class ImageHandler {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
+
+        Log.d("height: " + height, "width: " + width);
+        Log.d("rewHeight: " + reqHeight, "reqWidth: " + reqWidth);
 
         if (height > reqHeight || width > reqWidth) {
 

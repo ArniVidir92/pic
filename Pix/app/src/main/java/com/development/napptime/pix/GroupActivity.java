@@ -24,7 +24,7 @@ import java.util.List;
 public class GroupActivity extends Activity {
 
     private final String groupId = "2";
-    private final int maxPicNr = 5;
+    private final int maxPicNr = 15;
     private int numberOfPics = 0;
 
     private String[] titles;

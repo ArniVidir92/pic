@@ -11,5 +11,9 @@
     <string name="title_activity_selected_photo">SelectedPhotoActivity</string>
     <string name="title_activity_signup">signupActivity</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_create_group">Create Group</string>
+    <string name="pirates">Public</string>
+    <string name="publicGroup">Public</string>
+    <string name="privateGroup">Private</string>
 
 </resources>

@@ -6,6 +6,7 @@ import com.parse.Parse;
 
 /**
  * Created by Napptime on 2/22/15.
+ * Klasi sem gerir okkur kleift að tengjast Parse vefþjóninum.
  */
 public class SuperApplication extends Application {
     @Override

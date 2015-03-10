@@ -9,6 +9,9 @@ import android.widget.ImageView;
 
 /**
  * Created by Napptime on 2/24/15.
+ *
+ * Þessi klasi er ekki notaður í augnablikinu, var hann notaður í gamla group viewinu. Hann gæti
+ * haft smá notagildi og viljum við ganga úr skugga um að svo verði ekki áður en við eyðum honum.
  */
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;

@@ -21,6 +21,13 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 
+/**
+ * Created by Napptime on 2/19/15.
+ *
+ *  Klasinn sýnir þá mynd sem er valin og hægt er að gefa myndinni einkun ef þú ert hluti af grúppunni
+ *  sem myndin er í
+ */
+
 public class SelectedPhotoActivity extends Activity {
 
     private String thumbId = "";

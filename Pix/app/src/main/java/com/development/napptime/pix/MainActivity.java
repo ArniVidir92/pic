@@ -23,6 +23,12 @@ import com.parse.ParseUser;
 
 import java.util.Locale;
 
+/**
+ * Created by Napptime on 2/10/15.
+ *
+ *  Klasi þessi er miðsvæði appsins og heldur utan um þau fragment sem appið hefur, þ.e. Groups sem
+ *  notandi er í, myndavélina og svæðið þar sem notandi getur fundið nýja hópa.
+ */
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
 

@@ -14,16 +14,22 @@ import android.widget.ListView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.List;
 
+/**
+ * Created by Napptime on 2/7/15.
+ *
+ *  Klasi sem sýnir einstaka valda grúppu. Þetta inniheldur þá takka sem þarf til að framkvæma
+ *  aðgerðir innan hóps og sýnir þær myndir sem eru í núverandi keppni.
+ */
+
 
 public class GroupActivity extends Activity {
 
-    private final String groupId = "2";
+    private String groupId = "2";
     private final int maxPicNr = 15;
     private int numberOfPics = 0;
 
@@ -37,6 +43,11 @@ public class GroupActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            groupId = extras.getString("groupId");
+        }
+
         setContentView(R.layout.activity_group);
 
         getPhotos(groupId, maxPicNr, numberOfPics);
@@ -82,12 +93,18 @@ public class GroupActivity extends Activity {
         startActivity(i);
     }
 
+    public void goToCreateGroup(View view)
+    {
+        Intent i = new Intent( this, CreateGroupActivity.class);
+        startActivity(i);
+    }
+
     public void initializeListView(){
         list = (ListView) findViewById(R.id.list);
         groupPhotoListAdapter cus = new groupPhotoListAdapter(this,titles, description, pictures);
         list.setAdapter(cus);
 
-        //Button listener for a button that sends the user to Chosen contact if clicked.
+        //Button listener for a button that sends the user to Chosen picture if clicked.
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,

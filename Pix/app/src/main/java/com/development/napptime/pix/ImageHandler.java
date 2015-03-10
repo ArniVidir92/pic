@@ -7,6 +7,8 @@ import android.util.Log;
 
 /**
  * Created by Napptime on 2/21/15.
+ * Handles how images are decoded into Bitmap and how to resize them so they aren't as big as the
+ * camera allows
  */
 public class ImageHandler {
     public ImageHandler()

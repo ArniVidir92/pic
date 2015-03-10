@@ -25,6 +25,10 @@ import java.util.ArrayList;
 
 /**
  * Created by Napptime on 2/10/15.
+ *
+ * Klasi þessi sér um að sýna notanda þær public grúbbur sem hann gæti haft áhuga á að skoða
+ * og/eða taka þátt í. Eins og er gerir þessi klasi ekki það enþá og er þetta bara placeholder
+ * fyrir það sem koma skal.
  */
 
 public class FragmentDiscover extends Fragment
@@ -34,14 +38,6 @@ public class FragmentDiscover extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_discover,container,false);
 
-        ListView listView = (ListView) view.findViewById(R.id.list);
-
-        String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
-                "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
-                "Android", "iPhone", "WindowsMobile" };
-        //ListView list;
         String[] titles = {
                 "TheBoyZ",
                 "BigBangTheory",

@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 /**
  * Created by Napptime on 2/10/15.
+ *
+ * Klasi sem sér um að búa til listview adapter sem er fær um að vinna með listview eins og notað er
+ * í discover tabinu.
  */
 
 public class groupListAdapter extends ArrayAdapter<String>{

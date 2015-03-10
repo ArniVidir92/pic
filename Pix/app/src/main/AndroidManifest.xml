@@ -28,6 +28,10 @@
             android:label="@string/title_activity_group" >
         </activity>
         <activity
+            android:name=".CreateGroupActivity"
+            android:label="@string/title_activity_create_group" >
+        </activity>
+        <activity
             android:name=".SelectedPhotoActivity"
             android:label="@string/title_activity_selected_photo" >
         </activity>

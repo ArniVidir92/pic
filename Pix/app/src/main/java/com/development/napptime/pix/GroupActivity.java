@@ -14,11 +14,17 @@ import android.widget.ListView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.List;
+
+/**
+ * Created by Napptime on 2/7/15.
+ *
+ *  Klasi sem sýnir einstaka valda grúppu. Þetta inniheldur þá takka sem þarf til að framkvæma
+ *  aðgerðir innan hóps og sýnir þær myndir sem eru í núverandi keppni.
+ */
 
 
 public class GroupActivity extends Activity {
@@ -84,6 +90,12 @@ public class GroupActivity extends Activity {
     public void goToSignup(View view)
     {
         Intent i = new Intent( this, SignupActivity.class);
+        startActivity(i);
+    }
+
+    public void goToCreateGroup(View view)
+    {
+        Intent i = new Intent( this, CreateGroupActivity.class);
         startActivity(i);
     }
 

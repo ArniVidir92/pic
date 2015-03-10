@@ -6,16 +6,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.parse.ParseException;
-import com.parse.ParseUser;
-import com.parse.SignUpCallback;
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 
 public class CreateGroupActivity extends Activity {
 
     public boolean waiting;
+    public boolean priv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,33 +49,38 @@ public class CreateGroupActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void signUp(View view)
-    {
-        if(waiting ==true)
-            return;
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
 
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radio_private:
+                if (checked)
+                    priv = true;
+                    break;
+            case R.id.radio_public:
+                if (checked)
+                    priv = false;
+                    break;
+        }
+    }
+
+    public void createGroup(View view)
+    {
+        if(waiting == true)
+            return;
 
         String name = ((EditText) findViewById(R.id.editTextName)).getText().toString();
-        String email = ((EditText) findViewById(R.id.editTextEmail)).getText().toString();
-        String password = ((EditText) findViewById(R.id.editTextPassword)).getText().toString();
-        String passwordConfirm = ((EditText) findViewById(R.id.editTextPasswordConfirm)).getText().toString();
+        //ParseUser user = ParseUser.getCurrentUser();
 
-        if(!password.equals(passwordConfirm))
-        {
-            Toast toast = Toast.makeText(getApplicationContext(), "Password's don't match.", Toast.LENGTH_SHORT);
-            toast.show();
-            return;
-        }
+        final ParseObject groups = new ParseObject("Groups");
 
-        ParseUser user = new ParseUser();
-        user.setUsername(name);
-        user.setPassword(password);
-        user.setEmail(email);
+        groups.put("groupName", name);
+        groups.put("Private", priv);
 
-
-// other fields can be set just like with ParseObject
         waiting = true;
-        user.signUpInBackground(new SignUpCallback() {
+        groups.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e == null) {
                     waiting = false;
@@ -89,5 +96,6 @@ public class CreateGroupActivity extends Activity {
                 }
             }
         });
+
     }
 }

@@ -12,6 +12,12 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+/**
+ * Created by Napptime on 2/19/15.
+ *
+ * Klasinn gerir notanda kleift að nýskrá sig þannig að hann geti búið til hópa og sett inn myndir
+ */
+
 
 public class SignupActivity extends Activity {
 

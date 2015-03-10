@@ -13,6 +13,14 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.SaveCallback;
 
+/**
+ * Created by Napptime on 3/9/15.
+ *
+ * Klasinn gerir notanda kleift að búa til nýjann hóp. Klasinn sér einnig um að vista hópinn á
+ * vefþjóninum sem við notum (Parse).
+ *
+ */
+
 
 public class CreateGroupActivity extends Activity {
 

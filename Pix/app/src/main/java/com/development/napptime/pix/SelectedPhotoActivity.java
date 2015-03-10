@@ -20,7 +20,8 @@ import com.parse.ParseQuery;
 /**
  * Created by Napptime on 2/19/15.
  *
- *  Þessi klasi sér um að
+ *  Klasinn sýnir þá mynd sem er valin og hægt er að gefa myndinni einkun ef þú ert hluti af grúppunni
+ *  sem myndin er í
  */
 
 public class SelectedPhotoActivity extends Activity {

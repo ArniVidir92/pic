@@ -1,0 +1,59 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.development.napptime.pix.SignupActivity">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Group Name"
+        android:ems="10"
+        android:id="@+id/editTextName"
+        android:layout_above="@+id/radioPublicPrivate"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Group"
+        android:id="@+id/createGroupButton"
+        android:onClick="createGroup"
+        android:layout_below="@+id/radioPublicPrivate"
+        android:layout_alignLeft="@+id/radioPublicPrivate"
+        android:layout_alignStart="@+id/radioPublicPrivate"
+        android:layout_alignRight="@+id/radioPublicPrivate"
+        android:layout_alignEnd="@+id/radioPublicPrivate" />
+
+    <RadioGroup
+        android:id="@+id/radioPublicPrivate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/editTextName"
+        android:layout_alignStart="@+id/editTextName"
+        android:layout_alignRight="@+id/editTextName"
+        android:layout_alignEnd="@+id/editTextName">
+
+        <RadioButton
+            android:id="@+id/radio_public"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/publicGroup"
+            android:onClick="onRadioButtonClicked" />
+
+        <RadioButton
+            android:id="@+id/radio_private"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/privateGroup"
+            android:onClick="onRadioButtonClicked" />
+    </RadioGroup>
+
+</RelativeLayout>

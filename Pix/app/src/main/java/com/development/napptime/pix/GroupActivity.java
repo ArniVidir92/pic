@@ -14,7 +14,6 @@ import android.widget.ListView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -31,7 +30,7 @@ import java.util.List;
 public class GroupActivity extends Activity {
 
     private final String groupId = "2";
-    private final int maxPicNr = 5;
+    private final int maxPicNr = 15;
     private int numberOfPics = 0;
 
     private String[] titles;
@@ -86,6 +85,12 @@ public class GroupActivity extends Activity {
     public void goToSignup(View view)
     {
         Intent i = new Intent( this, SignupActivity.class);
+        startActivity(i);
+    }
+
+    public void goToCreateGroup(View view)
+    {
+        Intent i = new Intent( this, CreateGroupActivity.class);
         startActivity(i);
     }
 

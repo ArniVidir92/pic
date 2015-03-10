@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -39,7 +40,7 @@ public class SelectedPhotoActivity extends Activity {
 
         fetchExtras(extras);
 
-        getImage();
+        getImageAndPutIntoImageView();
 
     }
 
@@ -62,20 +63,20 @@ public class SelectedPhotoActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void setImage(ParseObject img){
-        byte[] file;
-        Bitmap image;
-        try {
-            file = img.getParseFile("file").getData();
-            image = BitmapFactory.decodeByteArray(file, 0, file.length);
-            ImageView iv = (ImageView) findViewById(R.id.imageView);
-            iv.setImageBitmap(image);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    public void setImage(Bitmap img){
+
+        ImageView iv = (ImageView) findViewById(R.id.imageView);
+        iv.setImageBitmap(img);
+
+        TextView titleView = (TextView) findViewById(R.id.Title);
+        titleView.setText(title);
+
+        TextView descrView = (TextView) findViewById(R.id.InformationTitle);
+        descrView.setText(description);
+
     }
 
-    public void getImage(){
+    public void getImageAndPutIntoImageView(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Picture");
         query.whereEqualTo("thumbnailId", thumbId);
         Log.d("asd", "" + thumbId);
@@ -84,8 +85,16 @@ public class SelectedPhotoActivity extends Activity {
                 if (object == null) {
                     Log.d("Picture is Null fuck", "This is not good.");
                 } else {
-                    setImage(object);
-                    Log.d("Retrieved picture", "Everything should be fine.");
+                    byte[] file;
+                    Bitmap image;
+
+                    try {
+                        file = object.getParseFile("file").getData();
+                        image = BitmapFactory.decodeByteArray(file, 0, file.length);
+                        setImage(image);
+                    } catch (ParseException error) {
+                        error.printStackTrace();
+                    }
                 }
             }
         });

@@ -1,5 +1,6 @@
 package com.development.napptime.pix;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,10 @@ import android.widget.TextView;
 public class GroupGridAdapter extends BaseAdapter{
     private Context mContext;
     private final String[] groupName;
-    private final int[] Imageid;
-    public GroupGridAdapter(Context c, String[] groupNames, int[] Imageid) {
+    private final Bitmap[] images;
+    public GroupGridAdapter(Context c, String[] groupNames, Bitmap[] Imageid) {
         mContext = c;
-        this.Imageid = Imageid;
+        this.images = Imageid;
         this.groupName = groupNames;
     }
     @Override
@@ -55,7 +56,7 @@ public class GroupGridAdapter extends BaseAdapter{
 
 
             textView.setText(groupName[position]);
-            imageView.setImageResource(Imageid[position]);
+            imageView.setImageBitmap(images[position]);
         } else {
             grid = (View) convertView;
         }

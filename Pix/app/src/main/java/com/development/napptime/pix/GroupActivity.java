@@ -23,7 +23,7 @@ import java.util.List;
 
 public class GroupActivity extends Activity {
 
-    private final String groupId = "2";
+    private String groupId = "2";
     private final int maxPicNr = 15;
     private int numberOfPics = 0;
 
@@ -37,6 +37,11 @@ public class GroupActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            groupId = extras.getString("groupId");
+        }
+
         setContentView(R.layout.activity_group);
 
         getPhotos(groupId, maxPicNr, numberOfPics);
@@ -87,7 +92,7 @@ public class GroupActivity extends Activity {
         groupPhotoListAdapter cus = new groupPhotoListAdapter(this,titles, description, pictures);
         list.setAdapter(cus);
 
-        //Button listener for a button that sends the user to Chosen contact if clicked.
+        //Button listener for a button that sends the user to Chosen picture if clicked.
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,

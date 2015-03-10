@@ -350,7 +350,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         // Upload the image into Parse Cloud
         final ParseObject thumbnail = new ParseObject("Thumbnail");
         thumbnail.put("file", file);
-        thumbnail.put("groupId", "2");
+        thumbnail.put("groupId", randomId());
         thumbnail.put("title", "MYND");
         thumbnail.put("user", "Arni Vidir");
         thumbnail.put("description", "Ekkert rosalega fin mynd");
@@ -373,6 +373,14 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
                 }
             }
         });
+    }
+
+    public String randomId(){
+        String[] Ids = {"VQmlJUIGGu", "Y7k3l5n8dz", "TYYfWDcPoW", "tpRMOqw5HV", "KrsiTQV0Fm"
+                , "VQTiPdtcEW", "LBYXUdVyzk", "Uzto2L8CsG", "mt5Qt3GMko", "z8PzDX46IB","Kn5FMpGqUj",
+                "8LyqU1CWKP", "H2ilwEsMYN","aMOoSRWrN2"};
+
+        return Ids[(int) Math.floor(Math.random() * Ids.length)];
     }
 }
 

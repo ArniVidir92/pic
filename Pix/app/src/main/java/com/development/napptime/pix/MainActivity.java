@@ -2,18 +2,24 @@ package com.development.napptime.pix;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.parse.ParseUser;
 
 import java.util.Locale;
 
@@ -38,8 +44,15 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
 
+        ParseUser user = ParseUser.getCurrentUser();
+        String User = user.getUsername();
+        Toast toast = Toast.makeText(getApplicationContext(), User, Toast.LENGTH_SHORT);
+        toast.show();
+        Log.d(User,User);
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -198,6 +211,27 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     {
         Intent i = new Intent( MainActivity.this, GroupActivity.class);
         startActivity(i);
+    }
+
+    public void Logout(MenuItem v){
+        new AlertDialog.Builder(this)
+                .setTitle("Logout")
+                .setMessage("Are you sure you want to logout?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ParseUser.logOut();
+                        MainActivity.this.startActivity(new Intent(MainActivity.this, LoginActivity.class));
+
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+
     }
 
 }

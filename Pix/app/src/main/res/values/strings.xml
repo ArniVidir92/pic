@@ -10,5 +10,6 @@
     <string name="title_activity_group">GroupActivity</string>
     <string name="title_activity_selected_photo">SelectedPhotoActivity</string>
     <string name="title_activity_signup">signupActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
 
 </resources>

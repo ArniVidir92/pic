@@ -1,11 +1,13 @@
 package com.development.napptime.pix;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseException;
@@ -22,6 +24,15 @@ public class SignupActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         waiting = false;
+
+        TextView Login_Link = (TextView) findViewById(R.id.Login_Link);
+        Login_Link.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                SignupActivity.this.startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+            }
+        });
     }
 
 
@@ -71,6 +82,7 @@ public class SignupActivity extends Activity {
         user.setEmail(email);
 
 
+
 // other fields can be set just like with ParseObject
         waiting = true;
         user.signUpInBackground(new SignUpCallback() {
@@ -79,6 +91,7 @@ public class SignupActivity extends Activity {
                     waiting = false;
                     Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
                     toast.show();
+                    SignupActivity.this.startActivity(new Intent(SignupActivity.this, MainActivity.class));
                     // Hooray! Let them use the app now.
                 } else {
                     waiting = false;

@@ -12,6 +12,10 @@ import android.widget.TextView;
 
 /**
  * Created by Napptime on 2/10/15.
+ *
+ * Þessi klasi er sá adapter sem er notaður til að birta myndir í hópum og er megin uppistaða hvers
+ * valins hóps. Hann sér um að birta myndir sem sóttar eru í gagnagrunn(myndir ekki sóttar úr
+ * gagnagrunni hér þó, heldur er það gert á viðeigandi stað).
  */
 
 public class groupPhotoListAdapter extends ArrayAdapter<String>{

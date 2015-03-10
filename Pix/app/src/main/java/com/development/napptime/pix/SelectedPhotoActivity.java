@@ -16,6 +16,12 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 
+/**
+ * Created by Napptime on 2/19/15.
+ *
+ *  Þessi klasi sér um að
+ */
+
 public class SelectedPhotoActivity extends Activity {
 
     private String thumbId = "";

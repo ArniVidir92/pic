@@ -34,6 +34,9 @@ import java.util.Date;
 
 /**
  * Created by Napptime on 2/10/15.
+ *
+ *  Klasi sem skilgreinir myndavél og virkni hennar sem fragment inn í mainactivity. Þessi klasi
+ *  sér einnig um þá virkni sem fylgir því að taka myndir og setja þær inn í gagnagrunn.
  */
 public class FragmentCamera extends Fragment implements Camera.PictureCallback, Camera.ShutterCallback {
 

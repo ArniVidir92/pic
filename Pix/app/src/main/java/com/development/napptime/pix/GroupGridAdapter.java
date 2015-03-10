@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 /**
  * Created by Napptime on 3/4/15.
+ *
+ * Klasi þessi sér um uppstillingu hópa og að búa til 'cards' fyrir hópa og raða þeim upp á
+ * mismunandi skjástærðir eftir sem bestu getu.
  */
 
 public class GroupGridAdapter extends BaseAdapter{

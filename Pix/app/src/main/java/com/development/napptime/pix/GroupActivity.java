@@ -20,6 +20,13 @@ import com.parse.ParseQuery;
 
 import java.util.List;
 
+/**
+ * Created by Napptime on 2/7/15.
+ *
+ *  Klasi sem sýnir einstaka valda grúppu. Þetta inniheldur þá takka sem þarf til að framkvæma
+ *  aðgerðir innan hóps og sýnir þær myndir sem eru í núverandi keppni.
+ */
+
 
 public class GroupActivity extends Activity {
 

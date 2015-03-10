@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 /**
  * Created by Napptime on 2/10/15.
+ *
+ * Klasi þessi sér um að sýna þá hópa sem notandi er nú þegar skráður í og er því miðsvæði appsins
+ * og upphafsskjár appsins að inn/nýskráningu undanskildri þegar appið er komið lengra.
  */
 public class FragmentGroups extends Fragment {
     @Nullable

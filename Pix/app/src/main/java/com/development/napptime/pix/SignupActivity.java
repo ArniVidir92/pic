@@ -3,6 +3,7 @@ package com.development.napptime.pix;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,6 +76,26 @@ public class SignupActivity extends Activity {
         String password = ((EditText) findViewById(R.id.editTextPassword)).getText().toString();
         String passwordConfirm = ((EditText) findViewById(R.id.editTextPasswordConfirm)).getText().toString();
 
+
+
+        if (name.equals("")) {
+            Toast toast = Toast.makeText(getApplicationContext(), "Please enter a username", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+
+        if (email.equals("")) {
+            Toast toast = Toast.makeText(getApplicationContext(), "Please enter an email", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+
+        if(password.equals("")){
+            Toast toast = Toast.makeText(getApplicationContext(), "Please enter a password.", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+
         if(!password.equals(passwordConfirm))
         {
             Toast toast = Toast.makeText(getApplicationContext(), "Password's don't match.", Toast.LENGTH_SHORT);
@@ -105,6 +126,26 @@ public class SignupActivity extends Activity {
                     toast.show();
                     // Sign up didn't succeed. Look at the ParseException
                     // to figure out what went wrong
+                    switch (e.getCode()) {
+                        case ParseException.USERNAME_TAKEN:
+                            Log.d("Testing", "Sorry, this username has already been taken.");
+                            break;
+                        case ParseException.USERNAME_MISSING:
+                            Log.d("Testing","Sorry, you must supply a username to register.");
+                            break;
+                        case ParseException.PASSWORD_MISSING:
+                            Log.d("Testing","Sorry, you must supply a password to register.");
+                            break;
+                        case ParseException.OBJECT_NOT_FOUND:
+                            Log.d("Testing","Sorry, those credentials were invalid.");
+                            break;
+                        case ParseException.CONNECTION_FAILED:
+                            Log.d("Testing","Internet connection was not found. Please see your connection settings.");
+                            break;
+                        default:
+                            Log.d("Testing",e.getLocalizedMessage());
+                            break;
+                    }
                 }
             }
         });

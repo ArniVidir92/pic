@@ -8,25 +8,6 @@ tools:context="com.development.napptime.pix.LoginActivity">
     android:layout_width="fill_parent"
     android:layout_height="wrap_content" android:background="#ffffff">
 
-    <LinearLayout android:id="@+id/header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#4ccbff"
-        android:paddingTop="5dip"
-        android:paddingBottom="5dip">
-        <ImageView android:src="@drawable/ic_launcher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"/>
-    </LinearLayout>
-
-    <LinearLayout android:id="@+id/footer"
-        android:layout_width="fill_parent"
-        android:layout_height="90dip"
-        android:background="@drawable/samplepic4"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
-    </LinearLayout>
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -34,8 +15,7 @@ tools:context="com.development.napptime.pix.LoginActivity">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dip"
-        android:layout_marginTop="60dp"
-        android:layout_below="@id/header">
+        android:layout_marginTop="60dp">
 
         <TextView android:layout_width="fill_parent"
             android:layout_height="wrap_content"

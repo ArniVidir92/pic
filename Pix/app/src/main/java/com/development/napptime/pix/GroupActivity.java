@@ -20,6 +20,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -140,7 +141,10 @@ public class GroupActivity extends Activity {
             }else{
                 photo = photoList.get(i - numberOfPics);
                 tempTitles[i] = photo.getString("title");
-                tempDscr[i] = photo.getString("description") + " Rating is " + photo.getNumber("rating");
+                ArrayList<Integer> al = new ArrayList<Integer>();
+                al = (ArrayList)photo.getList("ratings");
+                double x = Utility.calculateAverage(al);
+                tempDscr[i] = photo.getString("description") + " Rating is " + x;
                 tempPictureId[i] = photo.getObjectId();
                 file = photo.getParseFile("file").getData();
                 tempPictures[i] = BitmapFactory.decodeByteArray(file, 0, file.length);

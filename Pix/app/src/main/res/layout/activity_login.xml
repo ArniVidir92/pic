@@ -8,22 +8,18 @@ tools:context="com.development.napptime.pix.LoginActivity">
     android:layout_width="fill_parent"
     android:layout_height="wrap_content" android:background="#ffffff">
 
-    <LinearLayout android:id="@+id/header"
+    <ImageView android:id="@+id/header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="#4ccbff"
         android:paddingTop="5dip"
-        android:paddingBottom="5dip">
-        <ImageView android:src="@drawable/ic_launcher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"/>
-    </LinearLayout>
+        android:paddingBottom="5dip"
+        android:src="@drawable/ic_launcher"/>
 
     <LinearLayout android:id="@+id/footer"
         android:layout_width="fill_parent"
         android:layout_height="90dip"
-        android:background="@drawable/samplepic4"
+        android:background="#4ccbff"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
     </LinearLayout>

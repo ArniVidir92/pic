@@ -75,6 +75,13 @@ public class LoginActivity extends Activity {
 
         String user = ((EditText) findViewById(R.id.username_box)).getText().toString();
         String pass = ((EditText) findViewById(R.id.password_box)).getText().toString();
+
+        if (user.equals("") || pass.equals("")){
+            Toast toast = Toast.makeText(getApplicationContext(), "Please enter your username and password.", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+
         waiting = true;
         login_check(user, pass);
 

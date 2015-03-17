@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.parse.GetCallback;
@@ -44,6 +45,19 @@ public class SelectedPhotoActivity extends Activity {
         Bundle extras = getIntent().getExtras();
 
         fetchExtras(extras);
+
+
+        RatingBar bar = (RatingBar) findViewById(R.id.ratingBar);
+        bar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener()
+        {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating,
+                                        boolean fromUser) {
+                TextView titleView = (TextView) findViewById(R.id.Title);
+                titleView.setText("Change!"+rating);
+            }
+        });
+
 
         getImageAndPutIntoImageView();
 

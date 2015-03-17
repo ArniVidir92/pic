@@ -20,6 +20,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,6 +36,7 @@ public class GroupActivity extends Activity {
 
     private String groupId = "2";
     private final int maxPicNr = 15;
+    private int groupMembers = 10;
     private int numberOfPics = 0;
 
     private String[] titles;
@@ -125,10 +128,12 @@ public class GroupActivity extends Activity {
     public void updatePhotos(List<ParseObject> photoList, int size) throws ParseException {
         // Temporary arrays that are used to make the titles, description and pictures arrays
         // dynamically bigger
-        String[] tempTitles = new String[numberOfPics + size];
-        String[] tempDscr = new String[numberOfPics + size];
-        Bitmap[] tempPictures = new Bitmap[numberOfPics + size];
-        String[] tempPictureId = new String[numberOfPics + size];
+        int newSize = numberOfPics + size;
+        String[] tempTitles = new String[newSize];
+        String[] tempDscr = new String[newSize];
+        Bitmap[] tempPictures = new Bitmap[newSize];
+        String[] tempPictureId = new String[newSize];
+        //double[][] tempRatings = new double[newSize][groupMembers];
         ParseObject photo;
         byte[] file;
         for (int i = 0; i < numberOfPics + size; i++) {
@@ -140,7 +145,9 @@ public class GroupActivity extends Activity {
             }else{
                 photo = photoList.get(i - numberOfPics);
                 tempTitles[i] = photo.getString("title");
-                tempDscr[i] = photo.getString("description") + " Rating is " + photo.getNumber("rating");
+                ArrayList<Integer> al = (ArrayList)photo.getList("ratings");
+                double avgRating = Utility.calculateAverage(al);
+                tempDscr[i] = photo.getString("description") + " Rating is " + avgRating;
                 tempPictureId[i] = photo.getObjectId();
                 file = photo.getParseFile("file").getData();
                 tempPictures[i] = BitmapFactory.decodeByteArray(file, 0, file.length);

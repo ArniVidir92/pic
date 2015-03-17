@@ -12,7 +12,7 @@ import android.view.View;
 import com.parse.ParseUser;
 
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends SuperSettingsActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -22,7 +22,7 @@ import com.parse.SignUpCallback;
  */
 
 
-public class SignupActivity extends Activity {
+public class SignupActivity extends SuperSettingsActivity {
 
     public boolean waiting;
 
@@ -62,7 +62,7 @@ public class SignupActivity extends Activity {
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     public void signUp(View view)

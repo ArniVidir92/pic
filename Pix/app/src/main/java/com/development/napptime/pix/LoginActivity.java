@@ -15,7 +15,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseUser;
 
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends SuperSettingsActivity {
 
     public boolean waiting;
     @Override
@@ -63,8 +63,7 @@ public class LoginActivity extends Activity {
         if (id == R.id.action_settings) {
             return true;
         }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     public void login(View view){

@@ -45,12 +45,30 @@ tools:context="com.development.napptime.pix.LoginActivity">
         <TextView android:id="@+id/Register_Link"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dip"
+            android:layout_marginTop="20dip"
             android:layout_marginBottom="40dip"
             android:text="New to Pix? Register here"
             android:gravity="center"
             android:textSize="20dip"
             android:textColor="#0b84aa"/>
+        <TextView android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#372c24"
+            android:text="Email"/>
+        <EditText android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:inputType="textEmailAddress"
+            android:layout_marginBottom="20dip"
+            android:singleLine="true"
+            android:id = "@+id/email_box"/>
+        <Button android:id="@+id/ForgotPassword"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:text="Forgot my password"
+            android:gravity="center"
+            android:onClick="ResetPassword"/>
     </LinearLayout>
 </RelativeLayout>
 </ScrollView>

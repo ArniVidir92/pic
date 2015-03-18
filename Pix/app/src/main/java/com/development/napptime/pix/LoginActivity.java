@@ -13,6 +13,9 @@ import android.widget.Toast;
 
 import com.parse.LogInCallback;
 import com.parse.ParseUser;
+import com.parse.RequestPasswordResetCallback;
+
+import java.text.ParseException;
 
 
 public class LoginActivity extends SuperSettingsActivity {
@@ -41,6 +44,8 @@ public class LoginActivity extends SuperSettingsActivity {
                 LoginActivity.this.startActivity(new Intent(LoginActivity.this, SignupActivity.class));
             }
         });
+
+
 
     }
 
@@ -106,7 +111,30 @@ public class LoginActivity extends SuperSettingsActivity {
         startActivity(i);
     }
 
+    //Sends new password to given email
+    public void ResetPassword(View view){
 
+        String email = ((EditText) findViewById(R.id.email_box)).getText().toString();
+        if (email.equals("")){
+            Toast toast = Toast.makeText(getApplicationContext(), "please enter an email", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+
+        ParseUser.requestPasswordResetInBackground(email,
+                new RequestPasswordResetCallback() {
+                    public void done(com.parse.ParseException e) {
+                        if (e == null) {
+                            Toast toast = Toast.makeText(getApplicationContext(), "Email successfully sent", Toast.LENGTH_SHORT);
+                            toast.show();
+                        } else {
+                            Toast toast = Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT);
+                            toast.show();
+                            //com.parse.ParseException.INVALID_EMAIL_ADDRESS
+                        }
+                    }
+                });
+    }
 
 
 }

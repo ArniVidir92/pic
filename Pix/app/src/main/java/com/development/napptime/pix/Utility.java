@@ -2,10 +2,8 @@ package com.development.napptime.pix;
 
 import android.content.Context;
 import android.widget.Toast;
-
 import com.parse.LogInCallback;
 import com.parse.ParseUser;
-
 import java.util.List;
 
 /**
@@ -25,18 +23,19 @@ public class Utility {
 
     public static int indexOfIn(String theSearched, String theSearchable) {
         theSearched = theSearched.toLowerCase();
-        theSearchable = theSearchable.toLowerCase();
-        String[] array = theSearchable.split("|");
+        //theSearchable = theSearchable.toLowerCase();
+        String[] array = theSearchable.split("\\|");
 
         for (int i = 0; i < array.length; i++) {
-            if(theSearched.equals(array[i]));
+            if(theSearched.equals(array[i].toLowerCase()))
+            {return i;}
         }
 
         return -1;
     }
 
     public static String addToStringList(String list, String added) {
-
+        if(list.equals("")) return added;
         return list+"|"+added;
     }
 

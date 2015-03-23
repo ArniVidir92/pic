@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,27 +42,27 @@ public class GroupGridAdapter extends BaseAdapter{
         return 0;
     }
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public ShadowView getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
-        View grid;
+        ShadowView grid;
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            grid = new View(mContext);
-            grid = inflater.inflate(R.layout.grid_single, null);
+            grid = new ShadowView(mContext,null);
+            grid = (ShadowView)inflater.inflate(R.layout.grid_single,null);
             TextView textView = (TextView) grid.findViewById(R.id.grid_text);
             ImageView imageView = (ImageView)grid.findViewById(R.id.grid_image);
 
-            imageView.setAdjustViewBounds(true);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setAdjustViewBounds(false);
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 
-            imageView.setPadding(8, 8, 8, 8);
+
 
 
             textView.setText(groupName[position]);
             imageView.setImageBitmap(images[position]);
         } else {
-            grid = (View) convertView;
+            grid = (ShadowView) convertView;
         }
         return grid;
     }

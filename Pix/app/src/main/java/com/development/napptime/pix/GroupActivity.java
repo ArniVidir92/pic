@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -100,6 +101,9 @@ public class GroupActivity extends SuperSettingsActivity {
                 public void done(ParseUser parseUser, ParseException e) {
                     if( parseUser != null ){
                         makeRelation(parseUser);
+                    }else{
+                        Toast toast = Toast.makeText(getApplicationContext(), "This user does not exist", Toast.LENGTH_SHORT);
+                        toast.show();
                     }
                 }
             });

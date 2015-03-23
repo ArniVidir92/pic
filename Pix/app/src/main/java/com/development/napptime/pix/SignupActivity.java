@@ -22,7 +22,7 @@ import com.parse.SignUpCallback;
  */
 
 
-public class SignupActivity extends Activity {
+public class SignupActivity extends SuperSettingsActivity {
 
     public boolean waiting;
 
@@ -62,7 +62,7 @@ public class SignupActivity extends Activity {
             return true;
         }
 
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     public void signUp(View view)
@@ -76,30 +76,15 @@ public class SignupActivity extends Activity {
         String password = ((EditText) findViewById(R.id.editTextPassword)).getText().toString();
         String passwordConfirm = ((EditText) findViewById(R.id.editTextPasswordConfirm)).getText().toString();
 
-
-
-        if (name.equals("")) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Please enter a username", Toast.LENGTH_SHORT);
-            toast.show();
+        if(Utility.CheckName(name, getApplicationContext()) == false){
             return;
         }
 
-        if (email.equals("")) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Please enter an email", Toast.LENGTH_SHORT);
-            toast.show();
+        if(Utility.CheckEmail(email, getApplicationContext()) == false){
             return;
         }
 
-        if(password.equals("")){
-            Toast toast = Toast.makeText(getApplicationContext(), "Please enter a password.", Toast.LENGTH_SHORT);
-            toast.show();
-            return;
-        }
-
-        if(!password.equals(passwordConfirm))
-        {
-            Toast toast = Toast.makeText(getApplicationContext(), "Password's don't match.", Toast.LENGTH_SHORT);
-            toast.show();
+        if(Utility.CheckPassword(password, passwordConfirm, getApplicationContext()) == false){
             return;
         }
 

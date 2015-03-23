@@ -1,5 +1,11 @@
 package com.development.napptime.pix;
 
+import android.content.Context;
+import android.widget.Toast;
+
+import com.parse.LogInCallback;
+import com.parse.ParseUser;
+
 import java.util.List;
 
 /**
@@ -32,5 +38,91 @@ public class Utility {
     public static String addToStringList(String list, String added) {
 
         return list+"|"+added;
+    }
+
+    //Checks if the name input has our standards:
+    //only letters and numbers and not empty
+    //returns true if the name is allowed
+    public static boolean CheckName(String name, Context ac){
+        if(!name.matches("[a-zA-Z1234567890]*")){
+            Toast toast = Toast.makeText(ac, "Please enter a username with only letters and numbers.", Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
+
+        if (name.equals("")) {
+            Toast toast = Toast.makeText(ac, "Please enter a username", Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
+        return true;
+    }
+
+    //Checks if the name input has our standards:
+    //password length with minimum of 6 letters and maximum of 26 letters,
+    //password matches the "confirmed" password
+    //returns true if the password is allowed
+    public static boolean CheckPassword(String password, String passwordConfirm, Context ac){
+
+
+        if(password.length() < 6){
+            Toast toast = Toast.makeText(ac, "password must contain at least 6 letters", Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
+
+        if(password.length() > 26){
+            Toast toast = Toast.makeText(ac, "Password can only contain 25 letters or less", Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
+
+
+        if(!password.equals(passwordConfirm))
+        {
+            Toast toast = Toast.makeText(ac, "Password's don't match.", Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
+        return true;
+    }
+
+    //Checks if the email input has our standards:
+    //Not empty.
+    //returns true if the email is allowed
+    public static boolean CheckEmail(String email, Context ac){
+
+        if (email.equals("")) {
+            Toast toast = Toast.makeText(ac, "Please enter an email", Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
+        return true;
+    }
+
+    //Change the password of current user if he inputs the right current password
+    public void ChangePassword(String username, final String password, final String passwordConfirm, final String newPassword, final Context ac) {
+
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
+            public void done(ParseUser user, com.parse.ParseException e) {
+
+                if (user != null) {
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    if (Utility.CheckPassword(password, passwordConfirm, ac) == true) {
+                        currentUser.setPassword(newPassword);
+                        currentUser.saveInBackground();
+                        Toast toast = Toast.makeText(ac, "Password successfully changed.", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else {
+                        Toast toast = Toast.makeText(ac, "New password was either too short or too long.", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+
+                } else {
+                    Toast toast = Toast.makeText(ac, "Wrong current password", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
     }
 }

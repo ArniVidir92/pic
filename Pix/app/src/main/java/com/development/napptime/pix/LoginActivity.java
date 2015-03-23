@@ -13,9 +13,12 @@ import android.widget.Toast;
 
 import com.parse.LogInCallback;
 import com.parse.ParseUser;
+import com.parse.RequestPasswordResetCallback;
+
+import java.text.ParseException;
 
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends SuperSettingsActivity {
 
     public boolean waiting;
     @Override
@@ -42,6 +45,8 @@ public class LoginActivity extends Activity {
             }
         });
 
+
+
     }
 
 
@@ -63,8 +68,7 @@ public class LoginActivity extends Activity {
         if (id == R.id.action_settings) {
             return true;
         }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     public void login(View view){
@@ -75,6 +79,13 @@ public class LoginActivity extends Activity {
 
         String user = ((EditText) findViewById(R.id.username_box)).getText().toString();
         String pass = ((EditText) findViewById(R.id.password_box)).getText().toString();
+
+        if (user.equals("") || pass.equals("")){
+            Toast toast = Toast.makeText(getApplicationContext(), "Please enter your username and password.", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+
         waiting = true;
         login_check(user, pass);
 
@@ -100,7 +111,30 @@ public class LoginActivity extends Activity {
         startActivity(i);
     }
 
+    //Sends new password to given email
+    public void ResetPassword(View view){
 
+        String email = ((EditText) findViewById(R.id.email_box)).getText().toString();
+        if (email.equals("")){
+            Toast toast = Toast.makeText(getApplicationContext(), "please enter an email", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+
+        ParseUser.requestPasswordResetInBackground(email,
+                new RequestPasswordResetCallback() {
+                    public void done(com.parse.ParseException e) {
+                        if (e == null) {
+                            Toast toast = Toast.makeText(getApplicationContext(), "Email successfully sent", Toast.LENGTH_SHORT);
+                            toast.show();
+                        } else {
+                            Toast toast = Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT);
+                            toast.show();
+                            //com.parse.ParseException.INVALID_EMAIL_ADDRESS
+                        }
+                    }
+                });
+    }
 
 
 }

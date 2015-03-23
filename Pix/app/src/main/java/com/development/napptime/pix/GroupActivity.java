@@ -36,7 +36,7 @@ import java.util.List;
  */
 
 
-public class GroupActivity extends Activity {
+public class GroupActivity extends SuperSettingsActivity {
 
     private String groupId = "2";
     private final int maxPicNr = 15;
@@ -77,9 +77,7 @@ public class GroupActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
         return super.onOptionsItemSelected(item);
     }
 

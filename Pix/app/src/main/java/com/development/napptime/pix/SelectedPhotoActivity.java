@@ -32,7 +32,7 @@ import java.util.ArrayList;
  *  sem myndin er í
  */
 
-public class SelectedPhotoActivity extends Activity {
+public class SelectedPhotoActivity extends SuperSettingsActivity {
 
     private String thumbId = "";
     private String title = "";
@@ -88,9 +88,7 @@ public class SelectedPhotoActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
         return super.onOptionsItemSelected(item);
     }
 

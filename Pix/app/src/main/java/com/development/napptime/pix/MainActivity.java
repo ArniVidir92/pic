@@ -30,7 +30,7 @@ import java.util.Locale;
  *  notandi er í, myndavélina og svæðið þar sem notandi getur fundið nýja hópa.
  */
 
-public class MainActivity extends Activity implements ActionBar.TabListener {
+public class MainActivity extends SuperSettingsActivity implements ActionBar.TabListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -108,9 +108,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -217,27 +215,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     {
         Intent i = new Intent( MainActivity.this, GroupActivity.class);
         startActivity(i);
-    }
-
-    public void Logout(MenuItem v){
-        new AlertDialog.Builder(this)
-                .setTitle("Logout")
-                .setMessage("Are you sure you want to logout?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        ParseUser.logOut();
-                        MainActivity.this.startActivity(new Intent(MainActivity.this, LoginActivity.class));
-
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-
     }
 
 }

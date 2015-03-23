@@ -14,12 +14,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.ArrayList;
 
 
 /**
@@ -36,6 +39,11 @@ public class SelectedPhotoActivity extends Activity {
     private String description = "";
     private String groupId = "";
     private double rating = 0;
+    private ParseUser user;
+    private boolean waiting = true;
+    private String users = "";
+    private ArrayList<Integer> ratings;
+    private ParseObject photoObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +63,13 @@ public class SelectedPhotoActivity extends Activity {
                                         boolean fromUser) {
                 TextView titleView = (TextView) findViewById(R.id.Title);
                 titleView.setText("Change!"+rating);
+                rate((int)rating);
             }
         });
 
+
+
+        user = ParseUser.getCurrentUser();
 
         getImageAndPutIntoImageView();
 
@@ -117,6 +129,11 @@ public class SelectedPhotoActivity extends Activity {
                 }
             }
         });
+
+
+
+        getRatings();
+
     }
 
     public void fetchExtras(Bundle ex){
@@ -128,6 +145,49 @@ public class SelectedPhotoActivity extends Activity {
         }else{
             Log.d("Nothing in Bundle", "Error");
         }
+    }
+
+    public void getRatings()
+    {
+
+        ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Thumbnail");
+        query2.getInBackground(thumbId, new GetCallback<ParseObject>() {
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    waiting = false;
+                    users = object.getString("Raters");
+                    photoObject = object;
+                    ratings = (ArrayList)object.getList("ratings");
+                    int index = Utility.indexOfIn(user.getUsername(),users);
+                    if(index!=-1)
+                    {
+                        Toast toast = Toast.makeText(getApplicationContext(), "You have already rated this photo "+ratings.get(index), Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                } else {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Failed to retrieve data", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
+
+    }
+
+    public void rate(int x)
+    {
+        int index = Utility.indexOfIn(user.getUsername(),users);
+        if(index!=-1)
+        {
+            ratings.set(index,x);
+        }
+        else
+        {
+            users = Utility.addToStringList(users,user.getUsername());
+            ratings.add(x);
+        }
+        photoObject.put("ratings",ratings);
+        photoObject.put("Raters",users);
+        photoObject.saveInBackground();
     }
 
     public void Logout(MenuItem v){

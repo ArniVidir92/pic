@@ -8,6 +8,9 @@ import java.util.List;
 
 /**
  * Created by Napptime on 3/16/15.
+ *
+ * Þessi klasi skilgreinir föll sem aðrir klasar geta nýtt sér og virkar sem einskonar library.
+ * Hugsa má um þennan klasa sem extension á java.util pakkann
  */
 public class Utility {
     public static double calculateAverage(List<Integer> ratings) {

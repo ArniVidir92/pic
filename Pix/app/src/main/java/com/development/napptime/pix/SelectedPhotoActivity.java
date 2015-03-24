@@ -173,6 +173,8 @@ public class SelectedPhotoActivity extends SuperSettingsActivity {
 
     public void rate(int x)
     {
+        if(waiting)
+            return;
         int index = Utility.indexOfIn(user.getUsername(),users);
         if(index!=-1)
         {

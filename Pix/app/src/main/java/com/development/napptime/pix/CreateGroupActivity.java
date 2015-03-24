@@ -9,8 +9,12 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 /**
@@ -75,16 +79,40 @@ public class CreateGroupActivity extends SuperSettingsActivity {
         if(waiting == true)
             return;
 
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("username", "Admin");
+        query.getFirstInBackground(new GetCallback<ParseUser>() {
+            public void done(ParseUser user, ParseException e) {
+                if (e == null) {
+                    saveGroup(user);
+                } else {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Something went wrong when fetching ADMIN", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            }
+        });
+
+
+
+    }
+
+    public void saveGroup(ParseUser admin){
+        ParseObject group = new ParseObject("Groups");
+
         String name = ((EditText) findViewById(R.id.editTextName)).getText().toString();
-        //ParseUser user = ParseUser.getCurrentUser();
 
-        final ParseObject groups = new ParseObject("Groups");
+        group.put("groupName", name);
+        group.put("Private", priv);
+        group.put("coverPhoto","bDmC1sXKxf");
 
-        groups.put("groupName", name);
-        groups.put("Private", priv);
+        ParseRelation<ParseUser> relation = group.getRelation("groupMembers");
+
+        ParseUser user = ParseUser.getCurrentUser();
+        relation.add(admin);
+        relation.add(user);
 
         waiting = true;
-        groups.saveInBackground(new SaveCallback() {
+        group.saveInBackground(new SaveCallback() {
             public void done(ParseException e) {
                 if (e == null) {
                     waiting = false;
@@ -100,6 +128,5 @@ public class CreateGroupActivity extends SuperSettingsActivity {
                 }
             }
         });
-
     }
 }

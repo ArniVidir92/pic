@@ -17,9 +17,11 @@ import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +37,7 @@ public class FragmentGroups extends Fragment {
     private String[] groupIds;
     private String[] groupNames;
     private Bitmap[] covers;
+    private String[] coverId;
 
     private View view;
     private GridView gridView;
@@ -58,7 +61,7 @@ public class FragmentGroups extends Fragment {
         });
 */
 
-        getGroups("UserId");
+        getGroups();
 
 
         return view;
@@ -72,8 +75,9 @@ public class FragmentGroups extends Fragment {
     }
 
 
-    public void getGroups(String userId){
+    public void getGroups(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Groups");
+        query.whereEqualTo("groupMembers", ParseUser.getCurrentUser());
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> groupList, ParseException e) {
                 if (e == null) {
@@ -89,7 +93,7 @@ public class FragmentGroups extends Fragment {
     public void prepareTheListView(List<ParseObject> groupList){
         ParseObject group;
         int listLength = groupList.size();
-        String[] coverId = new String[listLength];
+        coverId = new String[listLength];
         groupIds = new String[listLength];
         groupNames = new String[listLength];
         covers = new Bitmap[listLength];
@@ -123,8 +127,12 @@ public class FragmentGroups extends Fragment {
         ParseObject photo;
         for(int i = 0; i < photos.size(); i++){
             photo = photos.get(i);
-            file = photo.getParseFile("file").getData();
-            covers[i] = BitmapFactory.decodeByteArray(file, 0, file.length);
+            for(int j = 0; j < coverId.length; j++){
+                if( photo.getObjectId().equals(coverId[j]) ){
+                    file = photo.getParseFile("file").getData();
+                    covers[j] = BitmapFactory.decodeByteArray(file, 0, file.length);
+                }
+            }
         }
 
         GroupGridAdapter adapter = new GroupGridAdapter(getActivity(), groupNames, covers);

@@ -17,6 +17,13 @@ import com.parse.RequestPasswordResetCallback;
 
 import java.text.ParseException;
 
+/**
+ * Created by Napptime on 2/21/15.
+ *
+ * Klasinn 
+ *
+ */
+
 
 public class LoginActivity extends SuperSettingsActivity {
 

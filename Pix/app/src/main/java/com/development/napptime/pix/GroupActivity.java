@@ -12,12 +12,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.lang.reflect.Array;
@@ -60,7 +65,6 @@ public class GroupActivity extends SuperSettingsActivity {
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -85,16 +89,45 @@ public class GroupActivity extends SuperSettingsActivity {
         list.setAdapter(null);
     }
 
-    public void goToPicture(View view)
+    public void saveInGroup(View view)
     {
-        Intent i = new Intent( this, SelectedPhotoActivity.class);
-        startActivity(i);
+        EditText userName = (EditText) findViewById(R.id.userName);
+        String s = userName.getText().toString();
+        if(s != null && !s.isEmpty()){
+            ParseQuery<ParseUser> query = ParseUser.getQuery();
+            query.whereEqualTo("username", s);
+            query.getFirstInBackground(new GetCallback<ParseUser>() {
+                @Override
+                public void done(ParseUser parseUser, ParseException e) {
+                    if( parseUser != null ){
+                        makeRelation(parseUser);
+                    }else{
+                        Toast toast = Toast.makeText(getApplicationContext(), "This user does not exist", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                }
+            });
+        }
     }
 
-    public void goToSignup(View view)
+    public void makeRelation(final ParseUser user){
+        ParseQuery<ParseObject> q = ParseQuery.getQuery("Groups");
+        q.whereEqualTo("objectId", groupId);
+        q.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObj, ParseException e) {
+                ParseRelation<ParseUser> relation = parseObj.getRelation("groupMembers");
+                relation.add(user);
+                parseObj.saveInBackground();
+            }
+        });
+    }
+
+    public int goToSignup(View view)
     {
         Intent i = new Intent( this, SignupActivity.class);
         startActivity(i);
+        return 0;
     }
 
     public void goToCreateGroup(View view)

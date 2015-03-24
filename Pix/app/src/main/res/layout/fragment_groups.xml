@@ -10,4 +10,6 @@
     android:horizontalSpacing="10dp"
     android:stretchMode="columnWidth"
     android:gravity="center"
+    android:background="#fefefe"
+    android:padding="5dp"
     />

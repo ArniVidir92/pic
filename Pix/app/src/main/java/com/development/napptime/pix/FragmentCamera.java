@@ -30,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -355,6 +356,8 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         thumbnail.put("file", file);
         thumbnail.put("groupId", randomId());
         thumbnail.put("title", "MYND");
+        thumbnail.put("Raters", "");
+        thumbnail.put("ratings", new ArrayList<Integer>());
         thumbnail.put("user", "Arni Vidir");
         thumbnail.put("description", "Ekkert rosalega fin mynd");
         thumbnail.put("rating", 4.5);
@@ -379,9 +382,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
     }
 
     public String randomId(){
-        String[] Ids = {"VQmlJUIGGu", "Y7k3l5n8dz", "TYYfWDcPoW", "tpRMOqw5HV", "KrsiTQV0Fm"
-                , "VQTiPdtcEW", "LBYXUdVyzk", "Uzto2L8CsG", "mt5Qt3GMko", "z8PzDX46IB","Kn5FMpGqUj",
-                "8LyqU1CWKP", "H2ilwEsMYN","aMOoSRWrN2"};
+        String[] Ids = {"sr5x4osaBS"};
 
         return Ids[(int) Math.floor(Math.random() * Ids.length)];
     }

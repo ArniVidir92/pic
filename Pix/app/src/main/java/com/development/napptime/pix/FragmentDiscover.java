@@ -4,24 +4,31 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Napptime on 2/10/15.
@@ -33,94 +40,109 @@ import java.util.ArrayList;
 
 public class FragmentDiscover extends Fragment
 {
+
+    private String[] groupIds;
+    private String[] groupNames;
+    private Bitmap[] covers;
+    private String[] coverId;
+
+    private View view;
+    private GridView gridView;
+
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        View view = inflater.inflate(R.layout.fragment_discover,container,false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        view = inflater.inflate(R.layout.fragment_groups, container, false);
 
-        String[] titles = {
-                "TheBoyZ",
-                "BigBangTheory",
-                "Family Vacation",
-                "Public"
-        } ;
-
-        String[] comments = {
-                "It's just monkey business",
-                "The big bang theory cast",
-                "Silly vacation photos",
-                "Everyone can vote, everyone can participate"
-        } ;
-
-        Integer[] imageId = {
-                R.drawable.samplepic1,
-                R.drawable.samplepic2,
-                R.drawable.samplepic3,
-                R.drawable.samplepic4
-        };
+        getGroups();
 
 
-        //==============================================
-        //            Test for Parse begin
-        //==============================================
-/*
-        // Make and upload thumbnail
-        Bitmap map = ImageHandler.decodeSampledBitmapFromResource(getResources(),R.drawable.samplepic3,100,100);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        // Compress image to lower quality scale 1 - 100§
-        map.compress(Bitmap.CompressFormat.JPEG,100 ,stream );
-        byte[] image = stream.toByteArray();
+        return view;
+    }
 
-        // Create the ParseFile
-        ParseFile file  = new ParseFile("picture_1.jpeg", image);
-        // Upload the image into Parse Cloud
-        final ParseObject thumbnail = new ParseObject("Thumbnail");
-        thumbnail.put("file", file);
-        thumbnail.put("groupId", "2");
-        thumbnail.put("title", "Drasl");
-        thumbnail.put("user", "Arni Vidir");
-        thumbnail.put("description", "Ekkert rosalega fin mynd");
-        thumbnail.put("rating", 4.5);
-        thumbnail.saveInBackground(new SaveCallback () {
-            @Override
-            public void done(ParseException ex) {
-                if (ex == null) {
-                    String thumbnailId = thumbnail.getObjectId();
-
-                    // Make full image and upload
-                    Bitmap mapFull = ImageHandler.decodeSampledBitmapFromResource(getResources(),R.drawable.samplepic3,500,500);
-                    ByteArrayOutputStream streamFull = new ByteArrayOutputStream();
-                    // Compress image to lower quality scale 1 - 100§
-                    mapFull.compress(Bitmap.CompressFormat.JPEG,100 ,streamFull );
-                    byte[] imageFull = streamFull.toByteArray();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        gridView = (GridView) view.findViewById(R.id.gridview);
+        gridView.setAdapter(null);
+    }
 
 
-                    ParseFile fileBig  = new ParseFile("picture_1Full.jpeg", imageFull);
-                    // Upload the image into Parse Cloud
-                    ParseObject picture = new ParseObject("Picture");
-                    picture.put("file", fileBig);
-                    picture.put("thumbnailId", thumbnailId);
-                    Log.d("thumbnailID", "" +thumbnailId);
-
-                    picture.saveInBackground();
+    public void getGroups(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Groups");
+        query.whereEqualTo("Private", false);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> groupList, ParseException e) {
+                if (e == null) {
+                    Log.d("Groups", "Retrieved " + groupList.size() + " Groups");
+                    prepareTheListView(groupList);
                 } else {
-                    // Failed
-                    Log.d("Faiile", "asdfasdf");
+                    Log.d("Groups retrieved", "Error: " + e.getMessage());
                 }
             }
         });
+    }
 
-*/
-        //==============================================
-        //            Test for Parse ends
-        //==============================================
+    public void prepareTheListView(List<ParseObject> groupList){
+        ParseObject group;
+        int listLength = groupList.size();
+        coverId = new String[listLength];
+        groupIds = new String[listLength];
+        groupNames = new String[listLength];
+        covers = new Bitmap[listLength];
+        for(int i = 0; i < listLength; i++){
+            group = groupList.get(i);
+            groupIds[i] = group.getObjectId();
+            coverId[i] = group.getString("coverPhoto");
+            groupNames[i] = group.getString("groupName");
+        }
 
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Thumbnail");
+        query.whereContainedIn("objectId", Arrays.asList(coverId));
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> coverList, ParseException e) {
+                if (e == null) {
+                    Log.d("coverPhotos", "Retrieved " + coverList.size() + " cover");
+                    try {
+                        initializeListView(coverList);
+                    } catch (ParseException e1) {
+                        e1.printStackTrace();
+                    }
+                } else {
+                    Log.d("coverPhotos retrieved", "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
 
+    public void initializeListView(List<ParseObject> photos) throws ParseException {
+        byte[] file;
+        ParseObject photo;
+        for(int i = 0; i < photos.size(); i++){
+            photo = photos.get(i);
+            for(int j = 0; j < coverId.length; j++){
+                if( photo.getObjectId().equals(coverId[j]) ){
+                    file = photo.getParseFile("file").getData();
+                    covers[j] = BitmapFactory.decodeByteArray(file, 0, file.length);
+                }
+            }
+        }
 
-        ListView list = (ListView) view.findViewById(R.id.groupList);
-        groupListAdapter cus = new groupListAdapter(getActivity(),titles, comments,imageId);
-        list.setAdapter(cus);
+        GroupGridAdapter adapter = new GroupGridAdapter(getActivity(), groupNames, covers);
+        gridView =(GridView) view.findViewById(R.id.gridview);
+        gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Toast.makeText(getActivity(), "You Clicked at " + groupNames[position], Toast.LENGTH_SHORT).show();
 
-        return view;
+                Intent i = new Intent( view.getContext(), GroupActivity.class);
+                i.putExtra("groupId", groupIds[position]);
+                view.getContext().startActivity(i);
+            }
+        });
+
     }
 }

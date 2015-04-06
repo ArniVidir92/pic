@@ -1,8 +1,6 @@
 package com.development.napptime.pix;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,8 +13,8 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -24,7 +22,6 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
-
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +37,9 @@ import java.util.List;
 public class GroupActivity extends SuperSettingsActivity {
 
     private String groupId = "2";
+    private String groupTheme = "2";
+    private String groupName = "2";
+    private String groupThemeInfo = "2";
     private final int maxPicNr = 15;
     private int groupMembers = 10;
     private int numberOfPics = 0;
@@ -49,6 +49,8 @@ public class GroupActivity extends SuperSettingsActivity {
     private Bitmap[] pictures;
     private String[] pictureIds;
 
+    private final int RESULT_CODE_THEME = 1;
+
     ListView list;
 
     @Override
@@ -57,13 +59,20 @@ public class GroupActivity extends SuperSettingsActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             groupId = extras.getString("groupId");
+            groupTheme = extras.getString("groupTheme");
+            groupName = extras.getString("groupName");
+            groupThemeInfo = extras.getString("groupThemeInfo");
         }
 
         setContentView(R.layout.activity_group);
 
+        ((TextView)findViewById(R.id.challenge)).setText(groupTheme);
+        ((TextView)findViewById(R.id.textViewTitle)).setText(groupName);
+
         getPhotos(groupId, maxPicNr, numberOfPics);
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -123,11 +132,27 @@ public class GroupActivity extends SuperSettingsActivity {
         });
     }
 
-    public int goToSignup(View view)
+    public int goToTheme(View view)
     {
-        Intent i = new Intent( this, SignupActivity.class);
-        startActivity(i);
+        Intent i = new Intent( this, SetThemeActivity.class);
+        i.putExtra("groupId", groupId);
+        i.putExtra("groupTheme", groupTheme);
+        i.putExtra("groupThemeInfo", groupThemeInfo);
+        i.putExtra("groupName", groupName);
+        startActivityForResult(i, RESULT_CODE_THEME);
         return 0;
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == RESULT_CODE_THEME) {
+            if (resultCode == RESULT_OK) {
+                groupTheme = data.getStringExtra("groupTheme");
+                groupThemeInfo = data.getStringExtra("groupThemeInfo");
+                ((TextView)findViewById(R.id.challenge)).setText(groupTheme);
+
+            }
+        }
     }
 
     public void goToCreateGroup(View view)

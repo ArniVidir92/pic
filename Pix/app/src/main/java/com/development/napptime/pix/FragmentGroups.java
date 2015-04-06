@@ -35,6 +35,8 @@ import java.util.List;
 public class FragmentGroups extends Fragment {
 
     private String[] groupIds;
+    private String[] groupThemes;
+    private String[] groupThemeInfos;
     private String[] groupNames;
     private Bitmap[] covers;
     private String[] coverId;
@@ -74,6 +76,12 @@ public class FragmentGroups extends Fragment {
         gridView.setAdapter(null);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getGroups();
+    }
+
 
     public void getGroups(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Groups");
@@ -95,11 +103,15 @@ public class FragmentGroups extends Fragment {
         int listLength = groupList.size();
         coverId = new String[listLength];
         groupIds = new String[listLength];
+        groupThemes = new String[listLength];
+        groupThemeInfos = new String[listLength];
         groupNames = new String[listLength];
         covers = new Bitmap[listLength];
         for(int i = 0; i < listLength; i++){
             group = groupList.get(i);
             groupIds[i] = group.getObjectId();
+            groupThemes[i] = group.getString("themeName");
+            groupThemeInfos[i] = group.getString("themeInfo");
             coverId[i] = group.getString("coverPhoto");
             groupNames[i] = group.getString("groupName");
         }
@@ -146,6 +158,9 @@ public class FragmentGroups extends Fragment {
 
                 Intent i = new Intent( view.getContext(), GroupActivity.class);
                 i.putExtra("groupId", groupIds[position]);
+                i.putExtra("groupTheme", groupThemes[position]);
+                i.putExtra("groupThemeInfo", groupThemeInfos[position]);
+                i.putExtra("groupName", groupNames[position]);
                 view.getContext().startActivity(i);
             }
         });

@@ -43,6 +43,8 @@ public class FragmentDiscover extends Fragment
 
     private String[] groupIds;
     private String[] groupNames;
+    private String[] groupThemes;
+    private String[] groupThemeInfos;
     private Bitmap[] covers;
     private String[] coverId;
 
@@ -84,11 +86,19 @@ public class FragmentDiscover extends Fragment
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getGroups();
+    }
+
     public void prepareTheListView(List<ParseObject> groupList){
         ParseObject group;
         int listLength = groupList.size();
         coverId = new String[listLength];
         groupIds = new String[listLength];
+        groupThemes = new String[listLength];
+        groupThemeInfos = new String[listLength];
         groupNames = new String[listLength];
         covers = new Bitmap[listLength];
         for(int i = 0; i < listLength; i++){
@@ -96,7 +106,10 @@ public class FragmentDiscover extends Fragment
             groupIds[i] = group.getObjectId();
             coverId[i] = group.getString("coverPhoto");
             groupNames[i] = group.getString("groupName");
+            groupThemes[i] = group.getString("themeName");
+            groupThemeInfos[i] = group.getString("themeInfo");
         }
+
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Thumbnail");
         query.whereContainedIn("objectId", Arrays.asList(coverId));
@@ -140,6 +153,9 @@ public class FragmentDiscover extends Fragment
 
                 Intent i = new Intent( view.getContext(), GroupActivity.class);
                 i.putExtra("groupId", groupIds[position]);
+                i.putExtra("groupName", groupNames[position]);
+                i.putExtra("groupTheme", groupThemes[position]);
+                i.putExtra("groupThemeInfo", groupThemeInfos[position]);
                 view.getContext().startActivity(i);
             }
         });

@@ -13,4 +13,5 @@
     <item name="darkgreen" type="color">#669900</item>
     <item name="darkorange" type="color">#FF8800</item>
     <item name="darkred" type="color">#CC0000</item>
+    <item name="darkgray" type="color">#333</item>
 </resources>

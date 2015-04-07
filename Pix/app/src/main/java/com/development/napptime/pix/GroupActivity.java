@@ -228,6 +228,7 @@ public class GroupActivity extends SuperSettingsActivity {
     public void getPhotos( String id, int max, int skip ){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Thumbnail");
         query.whereEqualTo("groupId", id);
+        query.whereEqualTo("hasWon", false);
         query.setLimit(max);
         query.setSkip(skip);
         query.findInBackground(new FindCallback<ParseObject>() {

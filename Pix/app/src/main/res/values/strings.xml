@@ -20,5 +20,7 @@
     <string name="dialog_setGrp">ok</string>
     <string name="dialog_cancel">cancel</string>
     <string name="title_activity_set_theme">SetThemeActivity</string>
+    <string name="title_activity_hall_of_fame">HallOfFameActivity</string>
+    <string name="title_activity_members">MembersActivity</string>
 
 </resources>

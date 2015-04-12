@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 /**
- * Created by Alexander on 17.3.2015.
+ * Created by Napptime on 17.3.2015.
  */
 public class SuperSettingsActivity extends Activity{
 

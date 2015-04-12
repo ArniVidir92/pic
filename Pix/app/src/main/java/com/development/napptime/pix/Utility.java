@@ -102,29 +102,5 @@ public class Utility {
         return true;
     }
 
-    //Change the password of current user if he inputs the right current password
-    public void ChangePassword(String username, final String password, final String passwordConfirm, final String newPassword, final Context ac) {
 
-        ParseUser.logInInBackground(username, password, new LogInCallback() {
-            public void done(ParseUser user, com.parse.ParseException e) {
-
-                if (user != null) {
-                    ParseUser currentUser = ParseUser.getCurrentUser();
-                    if (Utility.CheckPassword(password, passwordConfirm, ac) == true) {
-                        currentUser.setPassword(newPassword);
-                        currentUser.saveInBackground();
-                        Toast toast = Toast.makeText(ac, "Password successfully changed.", Toast.LENGTH_SHORT);
-                        toast.show();
-                    } else {
-                        Toast toast = Toast.makeText(ac, "New password was either too short or too long.", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-
-                } else {
-                    Toast toast = Toast.makeText(ac, "Wrong current password", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-            }
-        });
-    }
 }

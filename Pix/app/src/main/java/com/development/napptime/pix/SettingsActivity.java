@@ -75,4 +75,8 @@ public class SettingsActivity extends SuperSettingsActivity{
                 .show();
 
     }
+
+    public void ChangePasswordActivity(View view) {
+        SettingsActivity.this.startActivity(new Intent(SettingsActivity.this, ChangePasswordActivity.class));
+    }
 }

@@ -16,10 +16,12 @@ import com.parse.ParseUser;
 
 public class ChangePasswordActivity extends SuperSettingsActivity {
 
+    public boolean waiting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+        waiting = false;
     }
 
 
@@ -47,13 +49,18 @@ public class ChangePasswordActivity extends SuperSettingsActivity {
 
 
     public void ChangePassword(View view) {
+
+        if (waiting == true) return;
+
         ParseUser user = ParseUser.getCurrentUser();
         String User = user.getUsername();
         String OldPass = ((EditText) findViewById(R.id.OldPasswordBox)).getText().toString();
         String NewPass = ((EditText) findViewById(R.id.NewPasswordBox)).getText().toString();
         String NewPassConfirm = ((EditText) findViewById(R.id.NewPasswordConfirmBox)).getText().toString();
 
+        waiting = true;
         ChangePassword(User, OldPass, NewPass, NewPassConfirm, getApplicationContext());
+
 
     }
 
@@ -67,14 +74,17 @@ public class ChangePasswordActivity extends SuperSettingsActivity {
                 if (user != null) {
                     ParseUser currentUser = ParseUser.getCurrentUser();
                     if (Utility.CheckPassword(newPassword, newPasswordConfirm, ac) == true) {
+
                         currentUser.setPassword(newPassword);
                         currentUser.saveInBackground();
                         Toast toast = Toast.makeText(ac, "Password successfully changed.", Toast.LENGTH_SHORT);
                         toast.show();
+                        waiting = false;
                         ChangePasswordActivity.this.startActivity(new Intent(ChangePasswordActivity.this, SettingsActivity.class));
                     }
 
                 } else {
+                    waiting = false;
                     Toast toast = Toast.makeText(ac, "Wrong current password", Toast.LENGTH_SHORT);
                     toast.show();
                 }

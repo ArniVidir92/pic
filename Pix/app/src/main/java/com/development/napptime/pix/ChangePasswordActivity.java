@@ -80,7 +80,7 @@ public class ChangePasswordActivity extends SuperSettingsActivity {
                         Toast toast = Toast.makeText(ac, "Password successfully changed.", Toast.LENGTH_SHORT);
                         toast.show();
                         waiting = false;
-                        ChangePasswordActivity.this.startActivity(new Intent(ChangePasswordActivity.this, SettingsActivity.class));
+                        finish();
                     }
 
                 } else {

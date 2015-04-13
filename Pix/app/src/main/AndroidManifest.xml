@@ -62,6 +62,10 @@
             android:name=".MembersActivity"
             android:label="@string/title_activity_members" >
         </activity>
+        <activity
+            android:name=".ChangePasswordActivity"
+            android:label="@string/title_activity_change_password" >
+        </activity>
     </application>
 
 </manifest>

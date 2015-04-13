@@ -215,16 +215,15 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
 
         matrix.setRotate(90,img.getWidth()/2,img.getHeight()/2);
 
-        Bitmap imgRot = Bitmap.createBitmap(img , 0, 0, img.getWidth(), img.getHeight(), matrix, false);
-
-        return imgRot;
+        return Bitmap.createBitmap(img , 0, 0, img.getWidth(), img.getHeight(), matrix, false);
     }
 
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
         int width = bm.getWidth();
         int height = bm.getHeight();
+        float ratio = (float) height/width;
         float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
+        float scaleHeight = ratio * ((float) newHeight ) / height;
         // CREATE A MATRIX FOR THE MANIPULATION
         Matrix matrix = new Matrix();
         // RESIZE THE BIT MAP

@@ -19,7 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.parse.Parse;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
+import com.parse.PushService;
 
 import java.util.Locale;
 
@@ -59,6 +62,7 @@ public class MainActivity extends SuperSettingsActivity implements ActionBar.Tab
         Toast toast = Toast.makeText(getApplicationContext(), User, Toast.LENGTH_SHORT);
         toast.show();
         Log.d(User,User);
+
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);

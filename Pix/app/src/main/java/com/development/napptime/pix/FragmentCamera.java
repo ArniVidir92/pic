@@ -198,7 +198,9 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         Bitmap bigImage = getResizedBitmap(myImage, 500, 500);
         smallImage = rotate(smallImage);
         bigImage = rotate(bigImage);
-        myImage = rotate(myImage);
+
+        Bitmap testImage = getResizedBitmap(myImage, 2560, 1600);
+        testImage = rotate(testImage);
 
         //Store pictures in Documents
         File folder = Environment.getExternalStoragePublicDirectory(
@@ -213,7 +215,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         FileOutputStream fop = null;
         try {
             fop = new FileOutputStream(pictureFile);
-            myImage.compress(Bitmap.CompressFormat.JPEG, 100, fop);
+            testImage.compress(Bitmap.CompressFormat.JPEG, 100, fop);
             fop.flush();
             fop.close();
         } catch (FileNotFoundException e) {
@@ -222,14 +224,8 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             e.printStackTrace();
         }
 
-        /*
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bigImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] bytes = stream.toByteArray();
-        */
-
         Intent myIntent = new Intent(getActivity(), EditPictureActivity.class);
-        myIntent.putExtra("imgPath", pictureFile.getPath()); //Optional parameters
+        myIntent.putExtra("imgPath", pictureFile.getPath());
         startActivity(myIntent);
     }
 

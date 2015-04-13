@@ -116,6 +116,7 @@ public class LoginActivity extends SuperSettingsActivity {
     public void login_func(){
         Intent i = new Intent( this, MainActivity.class);
         startActivity(i);
+        finish();
     }
 
     //Sends new password to given email

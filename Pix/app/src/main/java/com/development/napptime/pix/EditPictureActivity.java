@@ -1,14 +1,18 @@
 package com.development.napptime.pix;
 
+import android.app.ActionBar;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -18,6 +22,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,16 +32,21 @@ import java.util.List;
  */
 
 
-public class EditPictureActivity extends SuperSettingsActivity {
+public class EditPictureActivity extends SuperSettingsActivity implements SurfaceHolder.Callback {
 
     private String imgPath;
     private Bitmap bmp;
+    private Rect src;
+    private Rect bmpRect;
     private Spinner grpSpinner;
 
     ArrayList<String> list = new ArrayList<String>();
 
     private String[] groupIds;
     private String[] groupNames;
+
+    private SurfaceHolder holder;
+    private SurfaceView surface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,16 +57,55 @@ public class EditPictureActivity extends SuperSettingsActivity {
         }
         setContentView(R.layout.activity_edit_picture);
 
+        ActionBar aBar = getActionBar();
+        aBar.hide();
+
         getGroups();
 
         bmp = BitmapFactory.decodeFile(imgPath);
 
-        ImageView img = (ImageView) findViewById(R.id.pic);
-        img.setImageBitmap(bmp);
+        src = new Rect(0,0, bmp.getWidth(), bmp.getHeight());
 
         grpSpinner = (Spinner) findViewById(R.id.spinner);
 
+        surface = (SurfaceView) findViewById(R.id.surface);
+        holder = surface.getHolder();
+
+        holder.addCallback(new SurfaceHolder.Callback() {
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+            }
+
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                Canvas c = holder.lockCanvas(null);
+                onDraw(c);
+                holder.unlockCanvasAndPost(c);
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format,
+                                       int width, int height) {
+            }
+        });
+
         populateSpinnerWidget();
+
+        File file = new File(imgPath);
+
+        if (file.exists()) {
+            file.delete();
+        } else {
+            System.err.println(
+                    "I cannot find '" + imgPath);
+        }
+    }
+
+    protected void onDraw(Canvas canvas) {
+        canvas.drawColor(Color.BLACK);
+        bmpRect = new Rect(0,0, canvas.getWidth(), canvas.getHeight());
+        canvas.drawBitmap(bmp, src, bmpRect, null);
     }
 
     /*
@@ -126,4 +175,20 @@ Spinner widget stuff for adding picture to a grp
 
     }
 
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        Canvas canvas = holder.lockCanvas();
+        canvas.drawColor(Color.RED);
+        holder.unlockCanvasAndPost(canvas);
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int i, int i2, int i3) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+
+    }
 }

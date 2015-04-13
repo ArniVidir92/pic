@@ -104,6 +104,7 @@ public class SignupActivity extends SuperSettingsActivity {
                     Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
                     toast.show();
                     SignupActivity.this.startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                    finish();
                     // Hooray! Let them use the app now.
                 } else {
                     waiting = false;

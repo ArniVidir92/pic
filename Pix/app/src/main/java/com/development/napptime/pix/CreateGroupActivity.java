@@ -118,6 +118,7 @@ public class CreateGroupActivity extends SuperSettingsActivity {
                     waiting = false;
                     Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
                     toast.show();
+
                     // Hooray! Let them use the app now.
                 } else {
                     waiting = false;

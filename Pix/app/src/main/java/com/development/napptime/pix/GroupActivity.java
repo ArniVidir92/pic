@@ -34,7 +34,7 @@ public class GroupActivity extends SuperSettingsActivity {
     private String groupTheme = "2";
     private String groupName = "2";
     private String groupThemeInfo = "2";
-    private final int maxPicNr = 15;
+    private final int maxPicNr = 100;
     private int groupMembers = 10;
     private int numberOfPics = 0;
 
@@ -122,8 +122,6 @@ public class GroupActivity extends SuperSettingsActivity {
         }
     }
 
-
-
     public void initializeListView(){
         list = (ListView) findViewById(R.id.list);
         groupPhotoListAdapter cus = new groupPhotoListAdapter(this,titles, description, pictures);
@@ -191,7 +189,7 @@ public class GroupActivity extends SuperSettingsActivity {
     public void getPhotos( String id, int max, int skip ){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Thumbnail");
         query.whereEqualTo("groupId", id);
-        query.whereEqualTo("hasWon", false);
+        //query.whereEqualTo("hasWon", false);
         query.setLimit(max);
         query.setSkip(skip);
         query.findInBackground(new FindCallback<ParseObject>() {

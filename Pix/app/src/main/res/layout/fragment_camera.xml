@@ -24,22 +24,8 @@ android:layout_height="match_parent">
         <View
             android:layout_width="0dp"
             android:layout_height="35dp"
-            android:layout_weight="1" />
+            android:layout_weight="2.5" />
 
-        <ImageButton
-            android:background="@drawable/dp"
-            android:id="@+id/btnCameraDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_gravity="bottom|center"
-            android:layout_marginBottom="15dp"
-            >
-        </ImageButton>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_weight="1" />
 
         <ImageButton
             android:background="@drawable/tp"

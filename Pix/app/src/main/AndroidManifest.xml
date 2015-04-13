@@ -53,6 +53,22 @@
         <activity
             android:name=".EditPictureActivity">
         </activity>
+        <activity
+            android:name=".SetThemeActivity"
+            android:label="@string/title_activity_set_theme" >
+        </activity>
+        <activity
+            android:name=".HallOfFameActivity"
+            android:label="@string/title_activity_hall_of_fame" >
+        </activity>
+        <activity
+            android:name=".MembersActivity"
+            android:label="@string/title_activity_members" >
+        </activity>
+        <activity
+            android:name=".ChangePasswordActivity"
+            android:label="@string/title_activity_change_password" >
+        </activity>
     </application>
 
 </manifest>

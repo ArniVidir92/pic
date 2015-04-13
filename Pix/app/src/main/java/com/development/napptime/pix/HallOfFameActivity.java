@@ -1,26 +1,24 @@
 package com.development.napptime.pix;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-/**
- * Created by Napptime on 17.3.2015.
- */
-public class SuperSettingsActivity extends Activity{
+
+public class HallOfFameActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_hall_of_fame);
     }
 
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_settings, menu);
+        getMenuInflater().inflate(R.menu.menu_hall_of_fame, menu);
         return true;
     }
 
@@ -33,8 +31,7 @@ public class SuperSettingsActivity extends Activity{
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent i = new Intent(this , SettingsActivity.class);
-            startActivity(i);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

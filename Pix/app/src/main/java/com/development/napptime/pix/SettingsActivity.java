@@ -62,8 +62,14 @@ public class SettingsActivity extends SuperSettingsActivity{
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         ParseUser.logOut();
-                        SettingsActivity.this.startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
+                        Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+                        intent.putExtra("finish", true);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                Intent.FLAG_ACTIVITY_NEW_TASK);
 
+                        startActivity(intent);
+                        finish();
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -74,5 +80,9 @@ public class SettingsActivity extends SuperSettingsActivity{
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
 
+    }
+
+    public void ChangePasswordActivity(View view) {
+        SettingsActivity.this.startActivity(new Intent(SettingsActivity.this, ChangePasswordActivity.class));
     }
 }

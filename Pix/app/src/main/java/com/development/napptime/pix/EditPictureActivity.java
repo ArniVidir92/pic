@@ -29,7 +29,7 @@ import java.util.List;
 
 public class EditPictureActivity extends SuperSettingsActivity {
 
-    private byte[] data;
+    private String imgPath;
     private Bitmap bmp;
     private Spinner grpSpinner;
 
@@ -43,20 +43,18 @@ public class EditPictureActivity extends SuperSettingsActivity {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            data = extras.getByteArray("BMP");
+            imgPath = extras.getString("imgPath");
         }
         setContentView(R.layout.activity_edit_picture);
 
         getGroups();
 
-        bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+        bmp = BitmapFactory.decodeFile(imgPath);
 
         ImageView img = (ImageView) findViewById(R.id.pic);
         img.setImageBitmap(bmp);
 
-
         grpSpinner = (Spinner) findViewById(R.id.spinner);
-
 
         populateSpinnerWidget();
     }

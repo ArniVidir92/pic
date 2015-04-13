@@ -9,17 +9,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseRelation;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +31,9 @@ import java.util.List;
 public class GroupActivity extends SuperSettingsActivity {
 
     private String groupId = "2";
+    private String groupTheme = "2";
+    private String groupName = "2";
+    private String groupThemeInfo = "2";
     private final int maxPicNr = 15;
     private int groupMembers = 10;
     private int numberOfPics = 0;
@@ -44,6 +43,8 @@ public class GroupActivity extends SuperSettingsActivity {
     private Bitmap[] pictures;
     private String[] pictureIds;
 
+    private final int RESULT_CODE_THEME = 1;
+
     ListView list;
 
     @Override
@@ -52,12 +53,19 @@ public class GroupActivity extends SuperSettingsActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             groupId = extras.getString("groupId");
+            groupTheme = extras.getString("groupTheme");
+            groupName = extras.getString("groupName");
+            groupThemeInfo = extras.getString("groupThemeInfo");
         }
 
         setContentView(R.layout.activity_group);
 
+        ((TextView)findViewById(R.id.challenge)).setText(groupTheme);
+        ((TextView)findViewById(R.id.textViewTitle)).setText(groupName);
+
         getPhotos(groupId, maxPicNr, numberOfPics);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,52 +91,38 @@ public class GroupActivity extends SuperSettingsActivity {
         list.setAdapter(null);
     }
 
-    public void saveInGroup(View view)
-    {
-        EditText userName = (EditText) findViewById(R.id.userName);
-        String s = userName.getText().toString();
-        if(s != null && !s.isEmpty()){
-            ParseQuery<ParseUser> query = ParseUser.getQuery();
-            query.whereEqualTo("username", s);
-            query.getFirstInBackground(new GetCallback<ParseUser>() {
-                @Override
-                public void done(ParseUser parseUser, ParseException e) {
-                    if( parseUser != null ){
-                        makeRelation(parseUser);
-                    }else{
-                        Toast toast = Toast.makeText(getApplicationContext(), "This user does not exist", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                }
-            });
-        }
-    }
 
-    public void makeRelation(final ParseUser user){
-        ParseQuery<ParseObject> q = ParseQuery.getQuery("Groups");
-        q.whereEqualTo("objectId", groupId);
-        q.getFirstInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject parseObj, ParseException e) {
-                ParseRelation<ParseUser> relation = parseObj.getRelation("groupMembers");
-                relation.add(user);
-                parseObj.saveInBackground();
-            }
-        });
-    }
 
-    public int goToSignup(View view)
+    public int goToTheme(View view)
     {
-        Intent i = new Intent( this, SignupActivity.class);
-        startActivity(i);
+        Intent i = new Intent( this, SetThemeActivity.class);
+        i.putExtra("groupId", groupId);
+        i.putExtra("groupTheme", groupTheme);
+        i.putExtra("groupThemeInfo", groupThemeInfo);
+        i.putExtra("groupName", groupName);
+        startActivityForResult(i, RESULT_CODE_THEME);
         return 0;
     }
 
-    public void goToCreateGroup(View view)
-    {
-        Intent i = new Intent( this, CreateGroupActivity.class);
+    public void goToMembers(View view){
+        Intent i = new Intent(this, MembersActivity.class);
+        i.putExtra("groupId",groupId);
         startActivity(i);
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == RESULT_CODE_THEME) {
+            if (resultCode == RESULT_OK) {
+                groupTheme = data.getStringExtra("groupTheme");
+                groupThemeInfo = data.getStringExtra("groupThemeInfo");
+                ((TextView)findViewById(R.id.challenge)).setText(groupTheme);
+
+            }
+        }
+    }
+
+
 
     public void initializeListView(){
         list = (ListView) findViewById(R.id.list);
@@ -197,6 +191,7 @@ public class GroupActivity extends SuperSettingsActivity {
     public void getPhotos( String id, int max, int skip ){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Thumbnail");
         query.whereEqualTo("groupId", id);
+        query.whereEqualTo("hasWon", false);
         query.setLimit(max);
         query.setSkip(skip);
         query.findInBackground(new FindCallback<ParseObject>() {

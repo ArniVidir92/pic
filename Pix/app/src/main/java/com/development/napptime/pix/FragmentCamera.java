@@ -185,7 +185,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
 
         //Use the picture date to provide each .jpg file with
         //a unique name
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         Date date = new Date();
         String fileName = "Image-" + dateFormat.format(date) + ".jpg";
         String bigFileName = "Big-" + fileName;
@@ -236,7 +236,6 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         }else{
             matrix.setRotate(270,img.getWidth()/2,img.getHeight()/2);
         }
-
 
         return Bitmap.createBitmap(img , 0, 0, img.getWidth(), img.getHeight(), matrix, false);
     }
@@ -446,11 +445,11 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         final ParseObject thumbnail = new ParseObject("Thumbnail");
         thumbnail.put("file", file);
         thumbnail.put("groupId", randomId());
-        thumbnail.put("title", "MYND");
+        thumbnail.put("title", randomName());
         thumbnail.put("Raters", "");
         thumbnail.put("ratings", new ArrayList<Integer>());
         thumbnail.put("user", "Arni Vidir");
-        thumbnail.put("description", "Ekkert rosalega fin mynd");
+        thumbnail.put("description", "Ekkert rosalega fin mynd af " + randomName());
         thumbnail.put("rating", 4.5);
         thumbnail.saveInBackground(new SaveCallback() {
             @Override
@@ -466,10 +465,18 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
                     picture.saveInBackground();
                 } else {
                     // Failed
-                    Log.d("Faiile", "asdfasdf");
+                    Log.d("Error"," Exception:"+ ex.toString());
                 }
             }
         });
+    }
+
+    public String randomName(){
+        String[] names = {"Arni", "Laama", "Ivan", "Snorri", "Lexi", "Android", "Potential winner", "Sunset", "Minecraft"
+                , "Lego kubbur", "Platypus", "Giraffe", "Purple", "Purple Picture", "Purple drank", "Hnetusmjör", "Peanut butter", "Dora", "Clock"
+                , "Shawarma", "Taco", "Pizza", "Toast", "HM 5: Swim", "Pogy master", "Nii-san", "Sleepless", "Groot", "Tauren chieftain"};
+
+        return names[(int) Math.floor(Math.random() * names.length)];
     }
 
     public String randomId() {

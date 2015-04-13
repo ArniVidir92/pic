@@ -28,7 +28,6 @@ import java.util.List;
 
 public class MembersActivity extends SuperSettingsActivity {
 
-
     //The ArrayAdapter for the listView
     private ArrayAdapter<String> adapter;
 

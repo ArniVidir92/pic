@@ -16,7 +16,8 @@ public class SuperApplication extends Application {
         // Enable Local Datastore.
         Parse.enableLocalDatastore(this);
 
-        Parse.initialize(this, "czKYh8xJNgkx86LmZTL1APShlqXSmw2KQXlKevPd", "KpwZwzlwdbIcwpAB9rfCsgTmrrB7UazKTNekBwy3");
+        //Parse.initialize(this, "czKYh8xJNgkx86LmZTL1APShlqXSmw2KQXlKevPd", "KpwZwzlwdbIcwpAB9rfCsgTmrrB7UazKTNekBwy3");
+        Parse.initialize(this, getString(R.string.parse_push_key), getString(R.string.parse_push_val));
 
     }
 

@@ -32,29 +32,19 @@
         android:layout_height="wrap_content"
         android:text="Members"
         android:id="@+id/button"
-        android:onClick="goToCreateGroup"
+        android:onClick="goToMembers"
         android:layout_alignTop="@+id/button2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/button2"
         android:layout_toStartOf="@+id/button2" />
 
-    <EditText
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/userName"
-        android:inputType="text"
-        android:layout_alignBottom="@+id/challenge"
-        android:layout_alignRight="@+id/button2"
-        android:layout_alignEnd="@+id/button2"
-        android:focusable="true"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hall of fame"
         android:id="@+id/button2"
-        android:onClick="saveInGroup"
         android:layout_below="@+id/textViewTitle"
         android:layout_centerHorizontal="true" />
 

@@ -16,7 +16,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 
-public class SetThemeActivity extends Activity {
+public class SetThemeActivity extends SuperSettingsActivity{
 
     private String groupId = "2";
     private String groupTheme = "2";

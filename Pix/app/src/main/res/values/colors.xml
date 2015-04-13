@@ -14,4 +14,8 @@
     <item name="darkorange" type="color">#FF8800</item>
     <item name="darkred" type="color">#CC0000</item>
     <item name="darkgray" type="color">#333</item>
+    <item name="primary" type="color">#AF0863</item>
+    <item name="primary_dark" type="color">#8A2E60</item>
+    <item name="accent" type="color">#643E53</item>
+
 </resources>

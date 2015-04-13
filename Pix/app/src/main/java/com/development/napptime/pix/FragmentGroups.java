@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -62,6 +63,14 @@ public class FragmentGroups extends Fragment {
             }
         });
 */
+        Button btn = (Button) view.findViewById(R.id.newGroup);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent( getActivity(), CreateGroupActivity.class);
+                startActivity(i);
+            }
+        });
 
         getGroups();
 
@@ -137,10 +146,10 @@ public class FragmentGroups extends Fragment {
     public void initializeListView(List<ParseObject> photos) throws ParseException {
         byte[] file;
         ParseObject photo;
-        for(int i = 0; i < photos.size(); i++){
+        for (int i = 0; i < photos.size(); i++) {
             photo = photos.get(i);
-            for(int j = 0; j < coverId.length; j++){
-                if( photo.getObjectId().equals(coverId[j]) ){
+            for (int j = 0; j < coverId.length; j++) {
+                if (photo.getObjectId().equals(coverId[j])) {
                     file = photo.getParseFile("file").getData();
                     covers[j] = BitmapFactory.decodeByteArray(file, 0, file.length);
                 }
@@ -148,7 +157,7 @@ public class FragmentGroups extends Fragment {
         }
 
         GroupGridAdapter adapter = new GroupGridAdapter(getActivity(), groupNames, covers);
-        gridView =(GridView) view.findViewById(R.id.gridview);
+        gridView = (GridView) view.findViewById(R.id.gridview);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -156,7 +165,7 @@ public class FragmentGroups extends Fragment {
                                     int position, long id) {
                 Toast.makeText(getActivity(), "You Clicked at " + groupNames[position], Toast.LENGTH_SHORT).show();
 
-                Intent i = new Intent( view.getContext(), GroupActivity.class);
+                Intent i = new Intent(view.getContext(), GroupActivity.class);
                 i.putExtra("groupId", groupIds[position]);
                 i.putExtra("groupTheme", groupThemes[position]);
                 i.putExtra("groupThemeInfo", groupThemeInfos[position]);

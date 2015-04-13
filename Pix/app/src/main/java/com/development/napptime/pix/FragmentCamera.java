@@ -183,6 +183,8 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         Bitmap smallImage = getResizedBitmap(myImage, 200, 200);
         // Bigger image
         Bitmap bigImage = getResizedBitmap(myImage, 500, 500);
+        smallImage = rotate(smallImage);
+        bigImage = rotate(bigImage);
 
         //Store pictures in Documents
         File folder = Environment.getExternalStoragePublicDirectory(
@@ -208,6 +210,15 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         camera.startPreview();
     }
 
+    public Bitmap rotate(Bitmap img){
+        Matrix matrix = new Matrix();
+
+        matrix.setRotate(90,img.getWidth()/2,img.getHeight()/2);
+
+        Bitmap imgRot = Bitmap.createBitmap(img , 0, 0, img.getWidth(), img.getHeight(), matrix, false);
+
+        return imgRot;
+    }
 
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
         int width = bm.getWidth();

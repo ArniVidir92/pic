@@ -98,39 +98,7 @@ public class GroupActivity extends SuperSettingsActivity {
         list.setAdapter(null);
     }
 
-    public void saveInGroup(View view)
-    {
-        EditText userName = (EditText) findViewById(R.id.userName);
-        String s = userName.getText().toString();
-        if(s != null && !s.isEmpty()){
-            ParseQuery<ParseUser> query = ParseUser.getQuery();
-            query.whereEqualTo("username", s);
-            query.getFirstInBackground(new GetCallback<ParseUser>() {
-                @Override
-                public void done(ParseUser parseUser, ParseException e) {
-                    if( parseUser != null ){
-                        makeRelation(parseUser);
-                    }else{
-                        Toast toast = Toast.makeText(getApplicationContext(), "This user does not exist", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                }
-            });
-        }
-    }
 
-    public void makeRelation(final ParseUser user){
-        ParseQuery<ParseObject> q = ParseQuery.getQuery("Groups");
-        q.whereEqualTo("objectId", groupId);
-        q.getFirstInBackground(new GetCallback<ParseObject>() {
-            @Override
-            public void done(ParseObject parseObj, ParseException e) {
-                ParseRelation<ParseUser> relation = parseObj.getRelation("groupMembers");
-                relation.add(user);
-                parseObj.saveInBackground();
-            }
-        });
-    }
 
     public int goToTheme(View view)
     {
@@ -141,6 +109,12 @@ public class GroupActivity extends SuperSettingsActivity {
         i.putExtra("groupName", groupName);
         startActivityForResult(i, RESULT_CODE_THEME);
         return 0;
+    }
+
+    public void goToMembers(View view){
+        Intent i = new Intent(this, MembersActivity.class);
+        i.putExtra("groupId",groupId);
+        startActivity(i);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -155,11 +129,7 @@ public class GroupActivity extends SuperSettingsActivity {
         }
     }
 
-    public void goToCreateGroup(View view)
-    {
-        Intent i = new Intent( this, CreateGroupActivity.class);
-        startActivity(i);
-    }
+
 
     public void initializeListView(){
         list = (ListView) findViewById(R.id.list);

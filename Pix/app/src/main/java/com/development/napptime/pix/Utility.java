@@ -127,4 +127,13 @@ public class Utility {
             }
         });
     }
+
+    public static boolean listContains(String s, List<String> list){
+        for(int i = 0; i < list.size(); i++ ){
+            if( s.equals(list.get(i)) ){
+                return true;
+            }
+        }
+        return false;
+    }
 }

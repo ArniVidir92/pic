@@ -2,7 +2,6 @@ package com.development.napptime.pix;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,7 +46,7 @@ public class ChangePasswordActivity extends SuperSettingsActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    //Changes password of current user
     public void ChangePassword(View view) {
 
         if (waiting == true) return;
@@ -59,13 +58,13 @@ public class ChangePasswordActivity extends SuperSettingsActivity {
         String NewPassConfirm = ((EditText) findViewById(R.id.NewPasswordConfirmBox)).getText().toString();
 
         waiting = true;
-        ChangePassword(User, OldPass, NewPass, NewPassConfirm, getApplicationContext());
+        ChangePass(User, OldPass, NewPass, NewPassConfirm, getApplicationContext());
 
 
     }
 
     //Change the password of current user if he inputs the right current password
-    public void ChangePassword(String username, final String password, final String newPassword, final String newPasswordConfirm, final Context ac) {
+    public void ChangePass(String username, final String password, final String newPassword, final String newPasswordConfirm, final Context ac) {
 
 
         ParseUser.logInInBackground(username, password, new LogInCallback() {

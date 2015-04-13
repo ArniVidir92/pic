@@ -15,7 +15,12 @@ import com.parse.ParseUser;
 
 import java.text.ParseException;
 
-
+/**
+ * Created by Napptime on 3/12/2015.
+ *
+ *  Activity that includes various settings like: logout, change password, etc.
+ *
+ */
 public class SettingsActivity extends SuperSettingsActivity{
 
     @Override

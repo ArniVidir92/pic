@@ -51,7 +51,6 @@ public class MainActivity extends SuperSettingsActivity implements ActionBar.Tab
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.activity_main);
 
         ParseUser user = ParseUser.getCurrentUser();

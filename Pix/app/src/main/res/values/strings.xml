@@ -25,5 +25,7 @@
     <string name="title_activity_hall_of_fame">HallOfFameActivity</string>
     <string name="title_activity_members">MembersActivity</string>
     <string name="title_activity_change_password">ChangePasswordActivity</string>
+    <string name="parse_push_key">czKYh8xJNgkx86LmZTL1APShlqXSmw2KQXlKevPd</string>
+    <string name="parse_push_val">KpwZwzlwdbIcwpAB9rfCsgTmrrB7UazKTNekBwy3</string>
 
 </resources>

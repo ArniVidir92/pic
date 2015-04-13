@@ -51,6 +51,9 @@
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
+            android:name=".EditPictureActivity">
+        </activity>
+        <activity
             android:name=".SetThemeActivity"
             android:label="@string/title_activity_set_theme" >
         </activity>

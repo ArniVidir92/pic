@@ -16,6 +16,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ import java.util.Date;
 public class FragmentCamera extends Fragment implements Camera.PictureCallback, Camera.ShutterCallback {
 
     private SurfaceView preview = null;
+    private FrameLayout layout = null;
     private SurfaceHolder previewHolder = null;
     private Camera camera = null;
 
@@ -63,9 +65,11 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_camera, container, false);
-
         super.onCreate(savedInstanceState);
+        return view;
+    }
 
+    public void removeAnimation() {
         {
             try {
                 getActivity().getActionBar().getClass().getDeclaredMethod("setShowHideAnimationEnabled", boolean.class).invoke(getActivity().getActionBar(), false);
@@ -77,8 +81,15 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
                 e.printStackTrace();
             }
         }
+    }
 
-        preview = (SurfaceView) view.findViewById(R.id.preview);
+    @Override
+    public void onResume() {
+
+        removeAnimation();
+
+        preview = (SurfaceView) getView().findViewById(R.id.preview);
+        layout = (FrameLayout) getView().findViewById(R.id.layout);
 
         //callback so we are notified when the underlying
         //surface is created and destroyed
@@ -100,8 +111,8 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         }
 
         //Our buttons
-        takePicture = (ImageButton) view.findViewById(R.id.btnTakePic);
-        switchCamera = (ImageButton) view.findViewById(R.id.btnCameraSwitch);
+        takePicture = (ImageButton) getView().findViewById(R.id.btnTakePic);
+        switchCamera = (ImageButton) getView().findViewById(R.id.btnCameraSwitch);
 
         //When clicked: take picture
         takePicture.setOnClickListener(new View.OnClickListener() {
@@ -144,15 +155,11 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
                 camera.startPreview();
             }
         });
-        return view;
-    }
 
-    @Override
-    public void onResume() {
         super.onResume();
-
-        camera = Camera.open();
-        startPreview();
+        camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
+        camera.startPreview();
+        preview.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -162,8 +169,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         }
         camera.release();
         camera = null;
-        isPreviewOn = false;
-
+        preview.setVisibility(View.GONE);
         super.onPause();
     }
 
@@ -353,9 +359,17 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
 
 
     private void startPreview() {
-        if (cameraReady && camera != null) {
+        if (!isPreviewOn && camera != null) {
             camera.startPreview();
             isPreviewOn = true;
+        }
+    }
+
+    // same for stopping the preview
+    private void stopPreview() {
+        if (isPreviewOn && (camera != null)) {
+            camera.stopPreview();
+            isPreviewOn = false;
         }
     }
 
@@ -421,6 +435,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             //Destroy the surface when we return and stop the preview
             if (camera != null) {
                 camera.stopPreview();
+                camera.release();
             }
         }
     };

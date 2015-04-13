@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -33,6 +34,8 @@ public class MembersActivity extends SuperSettingsActivity {
 
     private ListView listView;
 
+    private boolean isAMember = false;
+
     private String groupId = "";
 
     private List<String> memberNames = new ArrayList<String>();
@@ -44,6 +47,8 @@ public class MembersActivity extends SuperSettingsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_members);
 
+        setVisibility(View.GONE);
+
         listView = (ListView) findViewById(R.id.members_list);
 
         Intent i = getIntent(); // gets the previously created intent
@@ -52,6 +57,13 @@ public class MembersActivity extends SuperSettingsActivity {
         updateListView();
     }
 
+    private void setVisibility( int opt ){
+        Button btn = (Button) findViewById(R.id.addMember);
+        btn.setVisibility(opt);
+
+        EditText edTex = (EditText) findViewById(R.id.userName);
+        edTex.setVisibility(opt);
+    }
 
     private void updateListView(){
         final List<String> res = new ArrayList<String>();
@@ -71,9 +83,15 @@ public class MembersActivity extends SuperSettingsActivity {
                             userName = members.get(i).getUsername();
                             if (userName.equals(ParseUser.getCurrentUser().getUsername())) {
                                 userName += " (you)";
+                                isAMember = true;
                             }
                             res.add(i, userName);
                         }
+
+                        if( isAMember ){
+                            setVisibility(View.VISIBLE);
+                        }
+
                         memberNames = res;
                         //Adapts the listItems to our list view using lay_contacts_row
                         adapter = new ArrayAdapter<String>(getBaseContext(),

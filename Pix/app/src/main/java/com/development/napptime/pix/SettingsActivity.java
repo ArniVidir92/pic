@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
@@ -27,6 +29,12 @@ public class SettingsActivity extends SuperSettingsActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        ParseUser user = ParseUser.getCurrentUser();
+        String User = user.getUsername();
+
+        TextView text = (TextView) findViewById(R.id.UsernameText);
+        text.setText(User);
     }
 
 
@@ -90,4 +98,6 @@ public class SettingsActivity extends SuperSettingsActivity{
     public void ChangePasswordActivity(View view) {
         SettingsActivity.this.startActivity(new Intent(SettingsActivity.this, ChangePasswordActivity.class));
     }
+
+
 }

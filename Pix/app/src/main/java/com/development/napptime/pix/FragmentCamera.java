@@ -231,8 +231,12 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
 
     public Bitmap rotate(Bitmap img){
         Matrix matrix = new Matrix();
+        if( defaultCameraId == Camera.CameraInfo.CAMERA_FACING_BACK ){
+            matrix.setRotate(90,img.getWidth()/2,img.getHeight()/2);
+        }else{
+            matrix.setRotate(270,img.getWidth()/2,img.getHeight()/2);
+        }
 
-        matrix.setRotate(90,img.getWidth()/2,img.getHeight()/2);
 
         return Bitmap.createBitmap(img , 0, 0, img.getWidth(), img.getHeight(), matrix, false);
     }

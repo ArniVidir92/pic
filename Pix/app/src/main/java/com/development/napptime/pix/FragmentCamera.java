@@ -2,6 +2,7 @@ package com.development.napptime.pix;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -28,6 +29,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,6 +66,17 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
 
         super.onCreate(savedInstanceState);
 
+        {
+            try {
+                getActivity().getActionBar().getClass().getDeclaredMethod("setShowHideAnimationEnabled", boolean.class).invoke(getActivity().getActionBar(), false);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+        }
 
         preview = (SurfaceView) view.findViewById(R.id.preview);
 
@@ -72,6 +85,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         preview.getHolder().addCallback(surfaceCallback);
         previewHolder = preview.getHolder();
         previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
 
         //total number of cameras
         numberOfCameras = Camera.getNumberOfCameras();
@@ -110,10 +124,9 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
 
                 //We change the defaultCameraId to the one not currently
                 //active
-                if(defaultCameraId == Camera.CameraInfo.CAMERA_FACING_BACK){
+                if (defaultCameraId == Camera.CameraInfo.CAMERA_FACING_BACK) {
                     defaultCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
-                }
-                else {
+                } else {
                     defaultCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
                 }
                 //Open the camera again with the new defaultCameraId
@@ -179,16 +192,16 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
 
         //Decode the data to a bitmap
         Bitmap myImage = BitmapFactory.decodeByteArray(data, 0, data.length);
-        // Thumbnail
+        //Thumbnail
         Bitmap smallImage = getResizedBitmap(myImage, 200, 200);
-        // Bigger image
+        //Bigger image
         Bitmap bigImage = getResizedBitmap(myImage, 500, 500);
 
         //Store pictures in Documents
         File folder = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DOCUMENTS);
         File pictureFile = new File(folder, fileName);
-        if (pictureFile.exists ()) pictureFile.delete ();
+        if (pictureFile.exists()) pictureFile.delete();
 
         // This method uploads both a thumbnail and a big picture
         uploadToParseCloud(smallImage, bigImage, fileName, bigFileName);
@@ -205,9 +218,14 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        camera.startPreview();
-    }
 
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bigImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] bytes = stream.toByteArray();
+        Intent myIntent = new Intent(getActivity(), EditPictureActivity.class);
+        myIntent.putExtra("BMP", bytes); //Optional parameters
+        startActivity(myIntent);
+    }
 
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
         int width = bm.getWidth();
@@ -224,31 +242,76 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         return resizedBitmap;
     }
 
-    //Get the best previewSize for our device, needs further configuration
-    //Work in progress.
-    private Camera.Size getBestPreviewSize(int width, int height, Camera.Parameters parameters) {
+    //Get the best previewSize for our device
+    /*
+    private Camera.Size getBestPreviewSize(int w, int h, Camera.Parameters params) {
 
-        Camera.Size result = null;
 
-        for (Camera.Size size : parameters.getSupportedPreviewSizes()) {
+        //Set size of our preview
 
-            if (size.width <= width && size.height <= height) {
-                if (result == null) {
-                    result = size;
+        //float scalingY = 1f;
+        //float scalingX = 0.99f;
+       // preview.setScaleX(scalingX);
+        //preview.setScaleY(scalingY);
+
+
+        List<Camera.Size> sizes = params.getSupportedPictureSizes();
+        final double ASPECT_TOLERANCE = 0.1;
+        double targetRatio = (double) w / h;
+        if (sizes == null)
+            return null;
+        Camera.Size optimalSize = null;
+        double minDiff = Double.MAX_VALUE;
+        int targetHeight = h;
+        // Try to find and size match aspect ratio and size
+        for (Camera.Size size : sizes) {
+            double ratio = (double) size.width / size.height;
+            //Log.d("CameraActivity", "Checking size " + size.width + "w " + size.height + "h");
+            Log.d("CameraActivity", "targetRatio " + targetRatio + " and found ratio" + ratio);
+            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE)
+                continue;
+            if (Math.abs(size.height - targetHeight) < minDiff) {
+                optimalSize = size;
+                minDiff = Math.abs(size.height - targetHeight);
+            }
+        }
+
+        // Cannot find the one match the aspect ratio, ignore the requirement
+        if (optimalSize == null) {
+            minDiff = Double.MAX_VALUE;
+            for (Camera.Size size : sizes) {
+                if (Math.abs(size.height - targetHeight) < minDiff) {
+                    optimalSize = size;
+                    minDiff = Math.abs(size.height - targetHeight);
                 }
+            }
+        }
+        Log.d("CameraActivity", "Using size: " + optimalSize.width + "w " + optimalSize.height + "h");
+        Log.d("CameraActivity", "targetRatio " + optimalSize);
+        return optimalSize;
+    }
+    */
 
-                else {
-                    int resultArea = result.width*result.height;
-                    int newArea = size.width*size.height;
+    private Camera.Size getBestPreviewSize(int width, int height) {
+        Camera.Size result=null;
+        Camera.Parameters p = camera.getParameters();
+        for (Camera.Size size : p.getSupportedPreviewSizes()) {
+            if (size.width<=width && size.height<=height) {
+                if (result==null) {
+                    result=size;
+                } else {
+                    int resultArea=result.width*result.height;
+                    int newArea=size.width*size.height;
 
                     if (newArea>resultArea) {
-                        result = size;
+                        result=size;
                     }
                 }
             }
         }
         return result;
     }
+
 
     //Initiate our preview
     private void initPreview(int width, int height) {
@@ -263,7 +326,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             //then set the camera as ready
             if (!cameraReady) {
                 Camera.Parameters parameters = camera.getParameters();
-                Camera.Size size = getBestPreviewSize(width, height, camera.getParameters());
+                Camera.Size size = getBestPreviewSize(width, height);
 
                 if (size != null) {
                     parameters.setPreviewSize(size.width, size.height);
@@ -273,6 +336,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             }
         }
     }
+
 
     private void startPreview() {
         if (cameraReady && camera != null) {
@@ -294,10 +358,18 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         int degrees = 0;
 
         switch (rotation) {
-            case Surface.ROTATION_0: degrees = 0; break;
-            case Surface.ROTATION_90: degrees = 90; break;
-            case Surface.ROTATION_180: degrees = 180; break;
-            case Surface.ROTATION_270: degrees = 270; break;
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
         }
 
         int result;
@@ -314,6 +386,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         public void surfaceCreated(SurfaceHolder holder) {
             //When the surface is ready get the camera
             //and tell it where to draw
+
             try {
                 camera.setPreviewDisplay(holder);
             } catch (IOException e) {
@@ -321,21 +394,24 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             }
         }
 
+        @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width,
                                    int height) {
-            setCameraDisplayOrientation(getActivity(),defaultCameraId, camera);
+
+            setCameraDisplayOrientation(getActivity(), defaultCameraId, camera);
             initPreview(width, height);
             startPreview();
         }
 
         public void surfaceDestroyed(SurfaceHolder holder) {
             //Destroy the surface when we return and stop the preview
-            if (camera !=null) {
+            if (camera != null) {
                 camera.stopPreview();
             }
         }
     };
-    public void uploadToParseCloud(Bitmap smallImage, final Bitmap bigImage, String filename, final String bigFilename){
+
+    public void uploadToParseCloud(Bitmap smallImage, final Bitmap bigImage, String filename, final String bigFilename) {
         // Make thumbnail
         ByteArrayOutputStream streamSmall = new ByteArrayOutputStream();
         // Compress image to lower quality scale 1 - 100§
@@ -350,7 +426,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         final byte[] picture = streamBig.toByteArray();
 
         // Create the ParseFile
-        ParseFile file  = new ParseFile(filename, thumbnailPic);
+        ParseFile file = new ParseFile(filename, thumbnailPic);
         // Upload the image into Parse Cloud
         final ParseObject thumbnail = new ParseObject("Thumbnail");
         thumbnail.put("file", file);
@@ -366,7 +442,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             public void done(ParseException ex) {
                 if (ex == null) {
                     String thumbnailId = thumbnail.getObjectId();
-                    ParseFile fileBig  = new ParseFile(bigFilename, picture);
+                    ParseFile fileBig = new ParseFile(bigFilename, picture);
                     // Upload the image into Parse Cloud
                     ParseObject picture = new ParseObject("Picture");
                     picture.put("file", fileBig);
@@ -381,11 +457,9 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         });
     }
 
-    public String randomId(){
+    public String randomId() {
         String[] Ids = {"sr5x4osaBS"};
 
         return Ids[(int) Math.floor(Math.random() * Ids.length)];
     }
 }
-
-

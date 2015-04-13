@@ -12,13 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFacebookUtils;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -128,7 +125,7 @@ public class FragmentGroups extends Fragment {
         for(int i = 0; i < photos.size(); i++){
             photo = photos.get(i);
             for(int j = 0; j < coverId.length; j++){
-                if( photo.getObjectId().equals(coverId[j]) ){
+                if(photo.getObjectId().equals(coverId[j]) ){
                     file = photo.getParseFile("file").getData();
                     covers[j] = BitmapFactory.decodeByteArray(file, 0, file.length);
                 }

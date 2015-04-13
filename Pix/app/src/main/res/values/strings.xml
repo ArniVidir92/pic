@@ -19,5 +19,7 @@
     <string name="dialog_pickGrp">Pick a group</string>
     <string name="dialog_setGrp">ok</string>
     <string name="dialog_cancel">cancel</string>
+    <string name="grpSpinnerTitle">Pick a grp</string>
+    <string name="title_activity_edit_picture" />
 
 </resources>

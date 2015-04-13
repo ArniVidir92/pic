@@ -1,12 +1,9 @@
 package com.development.napptime.pix;
 
 import android.app.ActionBar;
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -116,7 +113,13 @@ public class MainActivity extends SuperSettingsActivity implements ActionBar.Tab
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in
         // the ViewPager.
-        mViewPager.setCurrentItem(tab.getPosition());
+    mViewPager.setCurrentItem(tab.getPosition());
+
+        ActionBar actionBar = getActionBar();
+
+    if (tab.getPosition() == 1) {
+        actionBar.hide();
+    } else { actionBar.show(); }
     }
 
     @Override

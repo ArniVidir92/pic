@@ -38,8 +38,6 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
     private SurfaceHolder previewHolder = null;
     private Camera camera = null;
 
-    private final static double epsilon = 0.17;
-
     //Button that lets the user take pictures
     private ImageButton takePicture;
     //Button that lets the user switch between front facing and rear facing cameras
@@ -195,8 +193,6 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
 
         //Decode the data to a bitmap
         Bitmap myImage = BitmapFactory.decodeByteArray(data, 0, data.length);
-        Bitmap img = Utility.getResizedBitmap(myImage, 2560, 1600);
-        img = Utility.rotate(img, defaultCameraId);
 
         //Store pictures in Documents
         File folder = Environment.getExternalStoragePublicDirectory(
@@ -208,7 +204,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         FileOutputStream fop = null;
         try {
             fop = new FileOutputStream(pictureFile);
-            img.compress(Bitmap.CompressFormat.JPEG, 100, fop);
+            myImage.compress(Bitmap.CompressFormat.JPEG, 100, fop);
             fop.flush();
             fop.close();
         } catch (FileNotFoundException e) {

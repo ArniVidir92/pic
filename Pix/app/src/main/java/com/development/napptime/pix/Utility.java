@@ -92,6 +92,7 @@ public class Utility {
         return true;
     }
 
+
     public static Bitmap rotate(Bitmap img, int defaultCameraId){
         Matrix matrix = new Matrix();
         if( defaultCameraId == Camera.CameraInfo.CAMERA_FACING_BACK ){

@@ -12,9 +12,11 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -57,16 +59,15 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
         }
         setContentView(R.layout.activity_edit_picture);
 
+
         ActionBar aBar = getActionBar();
         aBar.hide();
 
-        getGroups();
+        //getGroups();
 
         bmp = BitmapFactory.decodeFile(imgPath);
 
         src = new Rect(0,0, bmp.getWidth(), bmp.getHeight());
-
-        grpSpinner = (Spinner) findViewById(R.id.spinner);
 
         surface = (SurfaceView) findViewById(R.id.surface);
         holder = surface.getHolder();
@@ -90,7 +91,7 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
             }
         });
 
-        populateSpinnerWidget();
+        //populateSpinnerWidget();
 
         File file = new File(imgPath);
 

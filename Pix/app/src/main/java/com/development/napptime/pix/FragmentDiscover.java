@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
@@ -142,7 +144,12 @@ public class FragmentDiscover extends Fragment
             }
         }
 
-        GroupGridAdapter adapter = new GroupGridAdapter(getActivity(), groupNames, covers);
+        Point size = new Point();
+        WindowManager w = getActivity().getWindowManager();
+        w.getDefaultDisplay().getSize(size);
+        int h = size.y;
+
+        GroupGridAdapter adapter = new GroupGridAdapter(getActivity(), groupNames, covers, h/3);
         gridView =(GridView) view.findViewById(R.id.gridview);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

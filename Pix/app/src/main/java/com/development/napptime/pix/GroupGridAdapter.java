@@ -1,9 +1,11 @@
 package com.development.napptime.pix;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.GridLayout;
 import android.widget.GridView;
@@ -22,10 +24,12 @@ public class GroupGridAdapter extends BaseAdapter{
     private Context mContext;
     private final String[] groupName;
     private final Bitmap[] images;
-    public GroupGridAdapter(Context c, String[] groupNames, Bitmap[] Imageid) {
+    private final int h;
+    public GroupGridAdapter(Context c, String[] groupNames, Bitmap[] Imageid, int height) {
         mContext = c;
         this.images = Imageid;
         this.groupName = groupNames;
+        this.h = height;
     }
     @Override
     public int getCount() {
@@ -54,8 +58,8 @@ public class GroupGridAdapter extends BaseAdapter{
             TextView textView = (TextView) grid.findViewById(R.id.grid_text);
             ImageView imageView = (ImageView)grid.findViewById(R.id.grid_image);
 
-            imageView.setAdjustViewBounds(false);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView.setAdjustViewBounds(false );
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
 
 
@@ -65,6 +69,8 @@ public class GroupGridAdapter extends BaseAdapter{
         } else {
             grid = (RelativeLayout) convertView;
         }
+
+        grid.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, h));
         return grid;
     }
 }

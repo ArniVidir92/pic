@@ -103,7 +103,7 @@ public class CreateGroupActivity extends SuperSettingsActivity {
 
         group.put("groupName", name);
         group.put("Private", priv);
-        group.put("coverPhoto","bDmC1sXKxf");
+        group.put("coverPhoto","SO6mQYaxn8");
 
         ParseRelation<ParseUser> relation = group.getRelation("groupMembers");
 
@@ -119,6 +119,7 @@ public class CreateGroupActivity extends SuperSettingsActivity {
                     Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
                     toast.show();
 
+                    finish();
                     // Hooray! Let them use the app now.
                 } else {
                     waiting = false;

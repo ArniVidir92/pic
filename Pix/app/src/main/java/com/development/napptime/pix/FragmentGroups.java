@@ -4,12 +4,14 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -60,14 +62,7 @@ public class FragmentGroups extends Fragment {
             }
         });
 */
-        Button btn = (Button) view.findViewById(R.id.newGroup);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent i = new Intent( getActivity(), CreateGroupActivity.class);
-                startActivity(i);
-            }
-        });
 
         getGroups();
 
@@ -153,7 +148,12 @@ public class FragmentGroups extends Fragment {
             }
         }
 
-        GroupGridAdapter adapter = new GroupGridAdapter(getActivity(), groupNames, covers);
+        Point size = new Point();
+        WindowManager w = getActivity().getWindowManager();
+        w.getDefaultDisplay().getSize(size);
+        int h = size.y;
+
+        GroupGridAdapter adapter = new GroupGridAdapter(getActivity(), groupNames, covers, h/3);
         gridView = (GridView) view.findViewById(R.id.gridview);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -115,6 +115,11 @@
             android:name=".ImgDescriptionActivity"
             android:label="@string/title_activity_img_description" >
         </activity>
+        <activity
+            android:name=".TabbedGroupActivity"
+            android:label="@string/title_activity_tabbed_group" >
+
+        </activity>
     </application>
 
 </manifest>

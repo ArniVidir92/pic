@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -38,8 +39,12 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
     private SurfaceHolder previewHolder = null;
     private Camera camera = null;
 
+    private ByteArrayOutputStream stream;
+
     int screenWidth;
     int screenHeight;
+
+    Bitmap myImage = null;
 
     //Button that lets the user take pictures
     private ImageButton takePicture;
@@ -58,7 +63,6 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_camera, container, false);
         super.onCreate(savedInstanceState);
-
         screenWidth = DeviceDimensionsHelper.getDisplayWidth(getActivity());
         screenHeight = DeviceDimensionsHelper.getDisplayHeight(getActivity());
 
@@ -198,7 +202,10 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         String fileName = "Image-" + dateFormat.format(date) + ".jpg";
 
         //Decode the data to a bitmap
-        Bitmap myImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+        stream = new ByteArrayOutputStream();
+        myImage = BitmapFactory.decodeByteArray(data, 0, data.length);
+        myImage = BitmapScaler.scaleToFitHeight(myImage, screenHeight);
+        myImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
 
         //Store pictures in Documents
         File folder = Environment.getExternalStoragePublicDirectory(
@@ -212,7 +219,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             fop = new FileOutputStream(pictureFile);
             myImage.compress(Bitmap.CompressFormat.JPEG, 100, fop);
             fop.flush();
-            fop.close();
+            fop.close();Utility.deleteCache(getActivity());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -220,6 +227,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         }
 
         myImage.recycle();
+        myImage = null;
 
         Intent myIntent = new Intent(getActivity(), EditPictureActivity.class);
         myIntent.putExtra("imgPath", pictureFile.getPath());
@@ -262,7 +270,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             //then set the camera as ready
             if (!cameraReady) {
                 Camera.Parameters parameters = camera.getParameters();
-                Camera.Size size = getBestPreviewSize(screenWidth, screenHeight);
+                Camera.Size size = getBestPreviewSize(width, height);
 
                 if (size != null) {
                     parameters.setPreviewSize(size.width, size.height);

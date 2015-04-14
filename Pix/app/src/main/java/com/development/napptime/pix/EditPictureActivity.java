@@ -19,7 +19,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**
@@ -31,13 +31,12 @@ import java.util.List;
 public class EditPictureActivity extends SuperSettingsActivity implements SurfaceHolder.Callback {
 
     private String imgPath;
-    private Bitmap bmp;
+    private Bitmap bmp = null;
     private Rect src;
     private Rect bmpRect;
+    private ByteArrayOutputStream stream;
 
     int defaultCameraId;
-
-    ArrayList<String> list = new ArrayList<String>();
 
     private SurfaceHolder holder;
     private SurfaceView surface;
@@ -48,6 +47,7 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             imgPath = extras.getString("imgPath");
@@ -63,11 +63,6 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
 
         screenWidth = DeviceDimensionsHelper.getDisplayWidth(this);
         screenHeight = DeviceDimensionsHelper.getDisplayHeight(this);
-
-        bmp = BitmapFactory.decodeFile(imgPath);
-        bmp = BitmapScaler.scaleToFitHeight(bmp, screenHeight);
-
-        bmp = Utility.rotate(bmp, defaultCameraId);
 
         surface = (SurfaceView) findViewById(R.id.surface);
         holder = surface.getHolder();
@@ -95,6 +90,13 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
     }
 
     protected void onDraw(Canvas canvas) {
+
+        stream = new ByteArrayOutputStream();
+        bmp = BitmapFactory.decodeFile(imgPath);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        bmp = BitmapScaler.scaleToFitHeight(bmp, screenHeight);
+
+        bmp = Utility.rotate(bmp, defaultCameraId);
 
         bmpRect = new Rect(0,0, canvas.getWidth(), canvas.getHeight());
         src = new Rect(0,0, bmp.getWidth(), bmp.getHeight());
@@ -147,6 +149,7 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
         }
 
         bmp.recycle();
+        bmp = null;
 
         Intent myIntent = new Intent(this, ChooseGroupActivity.class);
         myIntent.putExtra("names",groupNames);
@@ -155,5 +158,4 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
         myIntent.putExtra("defaultCameraId", defaultCameraId);
         startActivity(myIntent);
     }
-
 }

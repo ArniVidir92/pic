@@ -31,19 +31,14 @@ public class ImgDescriptionActivity extends Activity {
     private String groupId;
     private String groupName;
     private String imgPath;
-    private Bitmap bmp;
+    private Bitmap bmp = null;
     private int defaultCameraId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_img_description);
-
         fetchExtras(getIntent());
-
-
-        bmp = BitmapFactory.decodeFile(imgPath);
-
         setButtonText();
 
     }
@@ -69,6 +64,10 @@ public class ImgDescriptionActivity extends Activity {
 
         int screenHeight = DeviceDimensionsHelper.getDisplayHeight(this);
 
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp = BitmapFactory.decodeFile(imgPath);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
         bmp = BitmapScaler.scaleToFitHeight(bmp, screenHeight);
         bmp = Utility.rotate(bmp,defaultCameraId);
 
@@ -85,11 +84,11 @@ public class ImgDescriptionActivity extends Activity {
 
         // This method uploads both a thumbnail and a big picture
         uploadToParseCloud(smallImage, bmp, fileName, bigFileName);
-
-
+        bmp.recycle();
+        bmp = null;
     }
 
-    public void uploadToParseCloud(Bitmap smallImage, final Bitmap bigImage, String filename, final String bigFilename) {
+    public void uploadToParseCloud(Bitmap smallImage, Bitmap bigImage, String filename, final String bigFilename) {
         String description = getImgDescription();
 
         // Make thumbnail
@@ -146,7 +145,6 @@ public class ImgDescriptionActivity extends Activity {
                     myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                             Intent.FLAG_ACTIVITY_CLEAR_TASK |
                             Intent.FLAG_ACTIVITY_NEW_TASK);
-
                     startActivity(myIntent);
                     finish();
 

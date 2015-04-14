@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -22,7 +20,6 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,19 +31,14 @@ public class ImgDescriptionActivity extends Activity {
     private String groupId;
     private String groupName;
     private String imgPath;
-    private Bitmap bmp;
+    private Bitmap bmp = null;
     private int defaultCameraId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_img_description);
-
         fetchExtras(getIntent());
-
-
-        bmp = BitmapFactory.decodeFile(imgPath);
-
         setButtonText();
 
     }
@@ -72,6 +64,10 @@ public class ImgDescriptionActivity extends Activity {
 
         int screenHeight = DeviceDimensionsHelper.getDisplayHeight(this);
 
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp = BitmapFactory.decodeFile(imgPath);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
         bmp = BitmapScaler.scaleToFitHeight(bmp, screenHeight);
         bmp = Utility.rotate(bmp,defaultCameraId);
 
@@ -88,11 +84,11 @@ public class ImgDescriptionActivity extends Activity {
 
         // This method uploads both a thumbnail and a big picture
         uploadToParseCloud(smallImage, bmp, fileName, bigFileName);
-
-
+        bmp.recycle();
+        bmp = null;
     }
 
-    public void uploadToParseCloud(Bitmap smallImage, final Bitmap bigImage, String filename, final String bigFilename) {
+    public void uploadToParseCloud(Bitmap smallImage, Bitmap bigImage, String filename, final String bigFilename) {
         String description = getImgDescription();
 
         // Make thumbnail
@@ -149,7 +145,6 @@ public class ImgDescriptionActivity extends Activity {
                     myIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                             Intent.FLAG_ACTIVITY_CLEAR_TASK |
                             Intent.FLAG_ACTIVITY_NEW_TASK);
-
                     startActivity(myIntent);
                     finish();
 

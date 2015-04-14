@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -22,7 +20,6 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -98,12 +95,12 @@ public class ImgDescriptionActivity extends Activity {
         // Make thumbnail
         ByteArrayOutputStream streamSmall = new ByteArrayOutputStream();
         // Compress image to lower quality scale 1 - 100§
-        //smallImage.compress(Bitmap.CompressFormat.JPEG, 100, streamSmall);
+        smallImage.compress(Bitmap.CompressFormat.JPEG, 100, streamSmall);
 
         // Make bigger picture which we also store
         ByteArrayOutputStream streamBig = new ByteArrayOutputStream();
         // Compress image to lower quality scale 1 - 100§
-        //bigImage.compress(Bitmap.CompressFormat.JPEG, 100, streamBig);
+        bigImage.compress(Bitmap.CompressFormat.JPEG, 100, streamBig);
 
         byte[] thumbnailPic = streamSmall.toByteArray();
         final byte[] picture = streamBig.toByteArray();

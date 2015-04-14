@@ -59,31 +59,15 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
         }
         setContentView(R.layout.activity_edit_picture);
 
+
         ActionBar aBar = getActionBar();
         aBar.hide();
 
-        getGroups();
+        //getGroups();
 
         bmp = BitmapFactory.decodeFile(imgPath);
 
         src = new Rect(0,0, bmp.getWidth(), bmp.getHeight());
-
-        grpSpinner = (Spinner) findViewById(R.id.spinner);
-
-        grpSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View v, int position, long id)
-            {
-                Toast.makeText(getBaseContext(), "Clickity clack!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0)
-            {
-                Log.v("routes", "nothing selected");
-            }
-        });
 
         surface = (SurfaceView) findViewById(R.id.surface);
         holder = surface.getHolder();
@@ -107,7 +91,7 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
             }
         });
 
-        populateSpinnerWidget();
+        //populateSpinnerWidget();
 
         File file = new File(imgPath);
 

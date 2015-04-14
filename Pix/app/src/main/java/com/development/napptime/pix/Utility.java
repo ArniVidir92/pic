@@ -1,6 +1,9 @@
 package com.development.napptime.pix;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.hardware.Camera;
 import android.widget.Toast;
 import com.parse.LogInCallback;
 import com.parse.ParseUser;
@@ -87,6 +90,33 @@ public class Utility {
             return false;
         }
         return true;
+    }
+
+    public static Bitmap rotate(Bitmap img, int defaultCameraId){
+        Matrix matrix = new Matrix();
+        if( defaultCameraId == Camera.CameraInfo.CAMERA_FACING_BACK ){
+            matrix.setRotate(90,img.getWidth()/2,img.getHeight()/2);
+        }else{
+            matrix.setRotate(270,img.getWidth()/2,img.getHeight()/2);
+        }
+
+        return Bitmap.createBitmap(img , 0, 0, img.getWidth(), img.getHeight(), matrix, false);
+    }
+
+    public static Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float ratio = (float) height/width;
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ratio * ((float) newHeight ) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        return resizedBitmap;
     }
 
     //Checks if the email input has our standards:

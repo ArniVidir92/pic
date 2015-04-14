@@ -24,17 +24,23 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-        <Button
-            android:layout_width="100dp"
+        <ImageButton
+            android:layout_width="50dp"
             android:background="@color/black"
             android:layout_height="50dp"
             android:text="Button"
+            android:id="@+id/proceed"
+            android:onClick="chooseGroup"
+            android:src="@drawable/greencheck12"
             android:color="#66FF0000"
             android:alpha="0.25"
             android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true">
+            android:layout_alignParentBottom="true"
+            android:adjustViewBounds="true"
+            android:cropToPadding="false"
+            android:scaleType="fitXY">
 
-        </Button>
+        </ImageButton>
 
     </RelativeLayout>
 

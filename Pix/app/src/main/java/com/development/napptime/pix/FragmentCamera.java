@@ -38,7 +38,8 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
     private SurfaceHolder previewHolder = null;
     private Camera camera = null;
 
-    private final static double epsilon = 0.17;
+    int screenWidth;
+    int screenHeight;
 
     //Button that lets the user take pictures
     private ImageButton takePicture;
@@ -57,6 +58,9 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_camera, container, false);
         super.onCreate(savedInstanceState);
+
+        screenWidth = DeviceDimensionsHelper.getDisplayWidth(getActivity());
+        screenHeight = DeviceDimensionsHelper.getDisplayHeight(getActivity());
 
         preview = (SurfaceView) view.findViewById(R.id.preview);
 
@@ -195,8 +199,6 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
 
         //Decode the data to a bitmap
         Bitmap myImage = BitmapFactory.decodeByteArray(data, 0, data.length);
-        Bitmap img = Utility.getResizedBitmap(myImage, 2560, 1600);
-        img = Utility.rotate(img, defaultCameraId);
 
         //Store pictures in Documents
         File folder = Environment.getExternalStoragePublicDirectory(
@@ -208,7 +210,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         FileOutputStream fop = null;
         try {
             fop = new FileOutputStream(pictureFile);
-            img.compress(Bitmap.CompressFormat.JPEG, 100, fop);
+            myImage.compress(Bitmap.CompressFormat.JPEG, 100, fop);
             fop.flush();
             fop.close();
         } catch (FileNotFoundException e) {
@@ -216,6 +218,8 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
+        myImage.recycle();
 
         Intent myIntent = new Intent(getActivity(), EditPictureActivity.class);
         myIntent.putExtra("imgPath", pictureFile.getPath());
@@ -258,7 +262,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             //then set the camera as ready
             if (!cameraReady) {
                 Camera.Parameters parameters = camera.getParameters();
-                Camera.Size size = getBestPreviewSize(width, height);
+                Camera.Size size = getBestPreviewSize(screenWidth, screenHeight);
 
                 if (size != null) {
                     parameters.setPreviewSize(size.width, size.height);

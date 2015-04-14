@@ -18,6 +18,7 @@ public class ChooseGroupActivity extends Activity {
     private String[] groupIds;
     private String[] groupNames;
     private String imgPath;
+    private int defaultCameraId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class ChooseGroupActivity extends Activity {
         groupIds = i.getStringArrayExtra("ids");
         groupNames = i.getStringArrayExtra("names");
         imgPath = i.getStringExtra("imgPath");
+        defaultCameraId = i.getExtras().getInt("defaultCameraId");
     }
 
     private void initListView(String[] names){
@@ -49,6 +51,7 @@ public class ChooseGroupActivity extends Activity {
                 myIntent.putExtra("name",groupNames[position]);
                 myIntent.putExtra("id", groupIds[position]);
                 myIntent.putExtra("imgPath", imgPath);
+                myIntent.putExtra("defaultCameraId",defaultCameraId);
                 startActivity(myIntent);
             }
         });

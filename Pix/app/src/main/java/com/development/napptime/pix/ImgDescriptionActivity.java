@@ -35,6 +35,7 @@ public class ImgDescriptionActivity extends Activity {
     private String groupName;
     private String imgPath;
     private Bitmap bmp;
+    private int defaultCameraId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class ImgDescriptionActivity extends Activity {
         setContentView(R.layout.activity_img_description);
 
         fetchExtras(getIntent());
+
 
         bmp = BitmapFactory.decodeFile(imgPath);
 
@@ -53,6 +55,8 @@ public class ImgDescriptionActivity extends Activity {
         groupId = i.getStringExtra("id");
         groupName = i.getStringExtra("name");
         imgPath = i.getStringExtra("imgPath");
+        defaultCameraId = i.getExtras().getInt("defaultCameraId");
+
     }
 
     private void setButtonText(){
@@ -66,6 +70,11 @@ public class ImgDescriptionActivity extends Activity {
 
     public void uploadPictures() {
 
+        int screenHeight = DeviceDimensionsHelper.getDisplayHeight(this);
+
+        bmp = BitmapScaler.scaleToFitHeight(bmp, screenHeight);
+        bmp = Utility.rotate(bmp,defaultCameraId);
+
         //Use the picture date to provide each .jpg file with
         //a unique name
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
@@ -74,13 +83,11 @@ public class ImgDescriptionActivity extends Activity {
         String bigFileName = "Big-" + fileName;
 
         //Thumbnail
-        Bitmap smallImage = Utility.getResizedBitmap(bmp, 200, 200);
+        Bitmap smallImage = BitmapScaler.scaleToFitHeight(bmp, screenHeight/2);
 
-        //Bigger image
-        Bitmap bigImage = Utility.getResizedBitmap(bmp, 500, 500);
 
         // This method uploads both a thumbnail and a big picture
-        uploadToParseCloud(smallImage, bigImage, fileName, bigFileName);
+        uploadToParseCloud(smallImage, bmp, fileName, bigFileName);
 
 
     }
@@ -91,12 +98,12 @@ public class ImgDescriptionActivity extends Activity {
         // Make thumbnail
         ByteArrayOutputStream streamSmall = new ByteArrayOutputStream();
         // Compress image to lower quality scale 1 - 100§
-        smallImage.compress(Bitmap.CompressFormat.JPEG, 100, streamSmall);
+        //smallImage.compress(Bitmap.CompressFormat.JPEG, 100, streamSmall);
 
         // Make bigger picture which we also store
         ByteArrayOutputStream streamBig = new ByteArrayOutputStream();
         // Compress image to lower quality scale 1 - 100§
-        bigImage.compress(Bitmap.CompressFormat.JPEG, 100, streamBig);
+        //bigImage.compress(Bitmap.CompressFormat.JPEG, 100, streamBig);
 
         byte[] thumbnailPic = streamSmall.toByteArray();
         final byte[] picture = streamBig.toByteArray();

@@ -1,6 +1,5 @@
 package com.development.napptime.pix;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -102,7 +100,6 @@ public class SelectedPhotoActivity extends SuperSettingsActivity {
 
         TextView descrView = (TextView) findViewById(R.id.InformationTitle);
         descrView.setText(description);
-
     }
 
     public void getImageAndPutIntoImageView(){

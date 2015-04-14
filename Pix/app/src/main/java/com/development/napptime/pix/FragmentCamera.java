@@ -218,6 +218,8 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
+        myImage.recycle();
 
         Intent myIntent = new Intent(getActivity(), EditPictureActivity.class);
         myIntent.putExtra("imgPath", pictureFile.getPath());

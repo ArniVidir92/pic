@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
@@ -448,7 +449,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         thumbnail.put("title", randomName());
         thumbnail.put("Raters", "");
         thumbnail.put("ratings", new ArrayList<Integer>());
-        thumbnail.put("user", "Arni Vidir");
+        thumbnail.put("user", ParseUser.getCurrentUser().getUsername());
         thumbnail.put("description", "Ekkert rosalega fin mynd af " + randomName());
         thumbnail.put("rating", 4.5);
         thumbnail.saveInBackground(new SaveCallback() {

@@ -70,6 +70,21 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
 
         grpSpinner = (Spinner) findViewById(R.id.spinner);
 
+        grpSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View v, int position, long id)
+            {
+                Toast.makeText(getBaseContext(), "Clickity clack!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0)
+            {
+                Log.v("routes", "nothing selected");
+            }
+        });
+
         surface = (SurfaceView) findViewById(R.id.surface);
         holder = surface.getHolder();
 
@@ -174,19 +189,6 @@ Spinner widget stuff for adding picture to a grp
         };
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         grpSpinner.setAdapter(adapter);
-
-        grpSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                Toast.makeText(getBaseContext(), "blablabla!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
-
-        });
 
     }
 

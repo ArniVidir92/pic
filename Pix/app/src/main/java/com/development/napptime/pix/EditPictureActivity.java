@@ -1,6 +1,7 @@
 package com.development.napptime.pix;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -40,12 +41,9 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
     private Bitmap bmp;
     private Rect src;
     private Rect bmpRect;
-    private Spinner grpSpinner;
 
     ArrayList<String> list = new ArrayList<String>();
 
-    private String[] groupIds;
-    private String[] groupNames;
 
     private SurfaceHolder holder;
     private SurfaceView surface;
@@ -92,15 +90,6 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
         });
 
         //populateSpinnerWidget();
-
-        File file = new File(imgPath);
-
-        if (file.exists()) {
-            file.delete();
-        } else {
-            System.err.println(
-                    "I cannot find '" + imgPath);
-        }
     }
 
     protected void onDraw(Canvas canvas) {
@@ -109,72 +98,6 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
         canvas.drawBitmap(bmp, src, bmpRect, null);
     }
 
-    /*
-Spinner widget stuff for adding picture to a grp
-*/
-    public void getGroups(){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Groups");
-        query.whereEqualTo("groupMembers", ParseUser.getCurrentUser());
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> groupList, ParseException e) {
-                if (e == null) {
-                    Log.d("Groups", "Retrieved " + groupList.size() + " Groups");
-                    prepareTheSpinner(groupList);
-                } else {
-                    Log.d("Groups retrieved", "Error: " + e.getMessage());
-                }
-            }
-        });
-    }
-
-    public void prepareTheSpinner(List<ParseObject> groupList){
-        ParseObject group;
-        int listLength = groupList.size();
-        groupIds = new String[listLength];
-        groupNames = new String[listLength];
-        for(int i = 0; i < listLength; i++){
-            group = groupList.get(i);
-            groupIds[i] = group.getObjectId();
-            groupNames[i] = group.getString("groupName");
-            list.add(group.getString("groupName"));
-        }
-    }
-
-    public void populateSpinnerWidget() {
-
-        //create an adapter and use it to move our list into the spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(EditPictureActivity.this,
-                R.layout.grp_spinner_textview,list) {
-
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-
-                // Typeface externalFont=Typeface.createFromAsset(getActivity().getAssets(), "fonts/test.ttf");
-                // ((TextView) v).setTypeface(externalFont);
-                ((TextView) v).setTextColor(getResources().getColorStateList((R.color.white)));
-                ((TextView) v).setTextSize(16);
-
-
-                return v;
-            }
-
-            public View getDropDownView(int position,  View convertView,  ViewGroup parent) {
-                View v =super.getDropDownView(position, convertView, parent);
-
-                //  Typeface externalFont=Typeface.createFromAsset(getActivity().getAssets(), "fonts/test.ttf");
-                // ((TextView) v).setTypeface(externalFont);
-                v.setBackgroundColor(Color.GREEN);
-                ((TextView) v).setTextColor(getResources().getColorStateList((R.color.white)));
-                ((TextView) v).setTextSize(16);
-
-
-                return v;
-            }
-        };
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        grpSpinner.setAdapter(adapter);
-
-    }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
@@ -192,4 +115,46 @@ Spinner widget stuff for adding picture to a grp
     public void surfaceDestroyed(SurfaceHolder holder) {
 
     }
+
+    public void chooseGroup(View v){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Groups");
+        query.whereEqualTo("groupMembers", ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> groupList, ParseException e) {
+                if (e == null) {
+                    Log.d("Groups", "Retrieved " + groupList.size() + " Groups");
+                    changeToGroupSelect(groupList);
+                } else {
+                    Log.d("Groups retrieved", "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void changeToGroupSelect(List<ParseObject> groups){
+        File file = new File(imgPath);
+
+        if (file.exists()) {
+            file.delete();
+        } else {
+            System.err.println(
+                    "I cannot find '" + imgPath);
+        }
+
+        int n = groups.size();
+        String[] groupIds = new String[n];
+        String[] groupNames = new String[n];
+        ParseObject group;
+        for( int i = 0; i < n; i++ ){
+            group = groups.get(i);
+            groupIds[i] = group.getObjectId();
+            groupNames[i] = group.getString("groupName");
+        }
+
+        Intent myIntent = new Intent(this, ChooseGroupActivity.class);
+        myIntent.putExtra("names",groupNames);
+        myIntent.putExtra("ids", groupIds);
+        startActivity(myIntent);
+    }
+
 }

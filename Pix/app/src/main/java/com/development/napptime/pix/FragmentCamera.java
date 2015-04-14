@@ -272,6 +272,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         return resizedBitmap;
     }
 
+    //Get best previewSize
     public static Camera.Size getBestPreviewSize(List<Camera.Size> sizes, int screenWidth, int screenHeight) {
         double aspectRatio = ((double)screenWidth)/screenHeight;
         Camera.Size optimalSize = null;
@@ -292,7 +293,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             }
         }
         if(optimalSize == null) {
-            //did not find a size with the correct aspect ratio.. let's choose the smallest instead
+            //did not find a size with the correct aspect ratio get the smallest instead
             for (Iterator<Camera.Size> iterator = sizes.iterator(); iterator.hasNext();) {
                 Camera.Size currSize =  iterator.next();
                 if(optimalSize!=null) {
@@ -310,78 +311,6 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         }
         return optimalSize;
     }
-
-
-
-
-/*
-    //Get the best previewSize for our device
-    private Camera.Size getBestPreviewSize(int w, int h) {
-
-        //Set size of our preview
-        //float scalingY = 1f;
-        //float scalingX = 0.99f;
-       // preview.setScaleX(scalingX);
-        //preview.setScaleY(scalingY);
-
-        Camera.Parameters params = camera.getParameters();
-
-
-        List<Camera.Size> sizes = params.getSupportedPictureSizes();
-        final double ASPECT_TOLERANCE = 0.1;
-        double targetRatio = (double) w / h;
-        if (sizes == null)
-            return null;
-        Camera.Size optimalSize = null;
-        double minDiff = Double.MAX_VALUE;
-        int targetHeight = h;
-        // Try to find and size match aspect ratio and size
-        for (Camera.Size size : sizes) {
-            double ratio = (double) size.width / size.height;
-            //Log.d("CameraActivity", "Checking size " + size.width + "w " + size.height + "h");
-            Log.d("CameraActivity", "targetRatio " + targetRatio + " and found ratio" + ratio);
-            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE)
-                continue;
-            if (Math.abs(size.height - targetHeight) < minDiff) {
-                optimalSize = size;
-                minDiff = Math.abs(size.height - targetHeight);
-            }
-        }
-
-        // Cannot find the one match the aspect ratio, ignore the requirement
-        if (optimalSize == null) {
-            minDiff = Double.MAX_VALUE;
-            for (Camera.Size size : sizes) {
-                if (Math.abs(size.height - targetHeight) < minDiff) {
-                    optimalSize = size;
-                    minDiff = Math.abs(size.height - targetHeight);
-                }
-            }
-        }
-        Log.d("CameraActivity", "Using size: " + optimalSize.width + "w " + optimalSize.height + "h");
-        Log.d("CameraActivity", "targetRatio " + optimalSize);
-        return optimalSize;
-    }
-    private Camera.Size getBestPreviewSize(int width, int height) {
-        Camera.Size result=null;
-        Camera.Parameters p = camera.getParameters();
-        for (Camera.Size size : p.getSupportedPreviewSizes()) {
-            if (size.width<=width && size.height<=height) {
-                if (result==null) {
-                    result=size;
-                } else {
-                    int resultArea=result.width*result.height;
-                    int newArea=size.width*size.height;
-
-                    if (newArea>resultArea) {
-                        result=size;
-                    }
-                }
-            }
-        }
-        return result;
-    }
-*/
 
     //Initiate our preview
     private void initPreview(int width, int height) {

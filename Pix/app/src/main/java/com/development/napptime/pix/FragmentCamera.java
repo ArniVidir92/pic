@@ -5,11 +5,9 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -19,13 +17,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,10 +24,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by Napptime on 2/10/15.
@@ -204,19 +192,11 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         Date date = new Date();
         String fileName = "Image-" + dateFormat.format(date) + ".jpg";
-        String bigFileName = "Big-" + fileName;
 
         //Decode the data to a bitmap
         Bitmap myImage = BitmapFactory.decodeByteArray(data, 0, data.length);
-        //Thumbnail
-        Bitmap smallImage = getResizedBitmap(myImage, 200, 200);
-        //Bigger image
-        Bitmap bigImage = getResizedBitmap(myImage, 500, 500);
-        smallImage = rotate(smallImage);
-        bigImage = rotate(bigImage);
-
-        Bitmap testImage = getResizedBitmap(myImage, 2560, 1600);
-        testImage = rotate(testImage);
+        Bitmap img = Utility.getResizedBitmap(myImage, 2560, 1600);
+        img = Utility.rotate(img, defaultCameraId);
 
         //Store pictures in Documents
         File folder = Environment.getExternalStoragePublicDirectory(
@@ -224,14 +204,11 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         File pictureFile = new File(folder, fileName);
         if (pictureFile.exists()) pictureFile.delete();
 
-        // This method uploads both a thumbnail and a big picture
-        uploadToParseCloud(smallImage, bigImage, fileName, bigFileName);
-
         //Output the file
         FileOutputStream fop = null;
         try {
             fop = new FileOutputStream(pictureFile);
-            testImage.compress(Bitmap.CompressFormat.JPEG, 100, fop);
+            img.compress(Bitmap.CompressFormat.JPEG, 100, fop);
             fop.flush();
             fop.close();
         } catch (FileNotFoundException e) {
@@ -242,75 +219,31 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
 
         Intent myIntent = new Intent(getActivity(), EditPictureActivity.class);
         myIntent.putExtra("imgPath", pictureFile.getPath());
+        myIntent.putExtra("defaultCameraId", defaultCameraId);
         startActivity(myIntent);
     }
 
-    public Bitmap rotate(Bitmap img){
-        Matrix matrix = new Matrix();
-        if( defaultCameraId == Camera.CameraInfo.CAMERA_FACING_BACK ){
-            matrix.setRotate(90,img.getWidth()/2,img.getHeight()/2);
-        }else{
-            matrix.setRotate(270,img.getWidth()/2,img.getHeight()/2);
-        }
-
-        return Bitmap.createBitmap(img , 0, 0, img.getWidth(), img.getHeight(), matrix, false);
-    }
-
-    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float ratio = (float) height/width;
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ratio * ((float) newHeight ) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight);
-
-        // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
-        return resizedBitmap;
-    }
-
     //Get best previewSize
-    public static Camera.Size getBestPreviewSize(List<Camera.Size> sizes, int screenWidth, int screenHeight) {
-        double aspectRatio = ((double)screenWidth)/screenHeight;
-        Camera.Size optimalSize = null;
-        for (Iterator<Camera.Size> iterator = sizes.iterator(); iterator.hasNext();) {
-            Camera.Size currSize =  iterator.next();
-            double curAspectRatio = ((double)currSize.width)/currSize.height;
-            //do the aspect ratios equal?
-            if ( Math.abs( aspectRatio - curAspectRatio ) < epsilon ) {
-                //they do
-                if(optimalSize!=null) {
-                    //is the current size smaller than the one before
-                    if(optimalSize.height>currSize.height && optimalSize.width>currSize.width) {
-                        optimalSize = currSize;
-                    }
+    private Camera.Size getBestPreviewSize(int width, int height) {
+        Camera.Size result=null;
+        Camera.Parameters p = camera.getParameters();
+        for (Camera.Size size : p.getSupportedPreviewSizes()) {
+            if (size.width<=width && size.height<=height) {
+                if (result==null) {
+                    result=size;
                 } else {
-                    optimalSize = currSize;
-                }
-            }
-        }
-        if(optimalSize == null) {
-            //did not find a size with the correct aspect ratio get the smallest instead
-            for (Iterator<Camera.Size> iterator = sizes.iterator(); iterator.hasNext();) {
-                Camera.Size currSize =  iterator.next();
-                if(optimalSize!=null) {
-                    //is the current size smaller than the one before
-                    if(optimalSize.height>currSize.height && optimalSize.width>currSize.width) {
-                        optimalSize = currSize;
-                    } else {
-                        optimalSize = currSize;
-                    }
-                }else {
-                    optimalSize = currSize;
-                }
+                    int resultArea=result.width*result.height;
+                    int newArea=size.width*size.height;
 
+                    if (newArea>resultArea) {
+                        result=size;
+                    }
+                }
             }
         }
-        return optimalSize;
+        return result;
     }
+
 
     //Initiate our preview
     private void initPreview(int width, int height) {
@@ -325,10 +258,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             //then set the camera as ready
             if (!cameraReady) {
                 Camera.Parameters parameters = camera.getParameters();
-
-                List<Camera.Size> sizes = parameters.getSupportedPictureSizes();
-
-                Camera.Size size = getBestPreviewSize(sizes, width, height);
+                Camera.Size size = getBestPreviewSize(width, height);
 
                 if (size != null) {
                     parameters.setPreviewSize(size.width, size.height);
@@ -422,64 +352,4 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             }
         }
     };
-
-    public void uploadToParseCloud(Bitmap smallImage, final Bitmap bigImage, String filename, final String bigFilename) {
-        // Make thumbnail
-        ByteArrayOutputStream streamSmall = new ByteArrayOutputStream();
-        // Compress image to lower quality scale 1 - 100§
-        smallImage.compress(Bitmap.CompressFormat.JPEG, 100, streamSmall);
-
-        // Make bigger picture which we also store
-        ByteArrayOutputStream streamBig = new ByteArrayOutputStream();
-        // Compress image to lower quality scale 1 - 100§
-        bigImage.compress(Bitmap.CompressFormat.JPEG, 100, streamBig);
-
-        byte[] thumbnailPic = streamSmall.toByteArray();
-        final byte[] picture = streamBig.toByteArray();
-
-        // Create the ParseFile
-        ParseFile file = new ParseFile(filename, thumbnailPic);
-        // Upload the image into Parse Cloud
-        final ParseObject thumbnail = new ParseObject("Thumbnail");
-        thumbnail.put("file", file);
-        thumbnail.put("groupId", randomId());
-        thumbnail.put("title", randomName());
-        thumbnail.put("Raters", "");
-        thumbnail.put("ratings", new ArrayList<Integer>());
-        thumbnail.put("user", ParseUser.getCurrentUser().getUsername());
-        thumbnail.put("description", "Ekkert rosalega fin mynd af " + randomName());
-        thumbnail.put("rating", 4.5);
-        thumbnail.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException ex) {
-                if (ex == null) {
-                    String thumbnailId = thumbnail.getObjectId();
-                    ParseFile fileBig = new ParseFile(bigFilename, picture);
-                    // Upload the image into Parse Cloud
-                    ParseObject picture = new ParseObject("Picture");
-                    picture.put("file", fileBig);
-                    picture.put("thumbnailId", thumbnailId);
-
-                    picture.saveInBackground();
-                } else {
-                    // Failed
-                    Log.d("Error"," Exception:"+ ex.toString());
-                }
-            }
-        });
-    }
-
-    public String randomName(){
-        String[] names = {"Arni", "Laama", "Ivan", "Snorri", "Lexi", "Android", "Potential winner", "Sunset", "Minecraft"
-                , "Lego kubbur", "Platypus", "Giraffe", "Purple", "Purple Picture", "Purple drank", "Hnetusmjör", "Peanut butter", "Dora", "Clock"
-                , "Shawarma", "Taco", "Pizza", "Toast", "HM 5: Swim", "Pogy master", "Nii-san", "Sleepless", "Groot", "Tauren chieftain"};
-
-        return names[(int) Math.floor(Math.random() * names.length)];
-    }
-
-    public String randomId() {
-        String[] Ids = {"sr5x4osaBS"};
-
-        return Ids[(int) Math.floor(Math.random() * Ids.length)];
-    }
 }

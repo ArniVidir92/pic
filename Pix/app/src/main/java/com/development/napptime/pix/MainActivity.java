@@ -16,10 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.parse.Parse;
-import com.parse.ParseInstallation;
 import com.parse.ParseUser;
-import com.parse.PushService;
 
 import java.util.Locale;
 

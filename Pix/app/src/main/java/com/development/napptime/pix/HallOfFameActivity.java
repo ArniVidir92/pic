@@ -5,6 +5,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+/**
+ * Created by Napptime on 13/04/2015.
+ * This activity manages the hall of fame and lets the user see the pictures that have won
+ * past contests (yet to be implemented)
+ */
 
 public class HallOfFameActivity extends Activity {
 

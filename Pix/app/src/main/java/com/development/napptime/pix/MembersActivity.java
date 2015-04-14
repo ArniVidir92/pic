@@ -1,10 +1,8 @@
 package com.development.napptime.pix;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +23,11 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Created by Napptime on 13/04/2015.
+ * This activity shows the members in a group
+ */
 
 public class MembersActivity extends SuperSettingsActivity {
 

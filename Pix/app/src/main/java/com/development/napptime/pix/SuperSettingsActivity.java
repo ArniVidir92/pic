@@ -9,6 +9,9 @@ import android.view.MenuItem;
 
 /**
  * Created by Napptime on 17.3.2015.
+ * All activities extend this activity
+ * Allows users to enter the settings from all activites and lets us lock the screen
+ * orientation in portrait mode
  */
 public class SuperSettingsActivity extends Activity{
 

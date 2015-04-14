@@ -10,6 +10,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+/**
+ * * Created by Napptime on 01/02/2015.
+ * * This class manages the groups, i.e. where the user can see all the groups he's part of
+*/
 
 public class ChooseGroupActivity extends Activity {
 

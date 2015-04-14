@@ -24,7 +24,8 @@ import java.util.List;
 
 /**
  * Created by Napptime on 13/04/15.
- *
+ * If a picture is taken with the camera this class manages showing that picture to the user and
+ * allows him to edit it (editing is yet to be implemented)
  */
 
 

@@ -1,6 +1,5 @@
 package com.development.napptime.pix;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +11,10 @@ import android.widget.Toast;
 import com.parse.LogInCallback;
 import com.parse.ParseUser;
 
+/**
+ * Created by Napptime on 14/04/2015.
+ * This class allows users to change their password
+ */
 
 public class ChangePasswordActivity extends SuperSettingsActivity {
 

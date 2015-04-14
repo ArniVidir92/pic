@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 /**
  * Created by SnorriAgust on 14/04/2015.
+ * This is a helper class that allows us to scale bitmaps
  */
 public class BitmapScaler
 {

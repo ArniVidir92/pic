@@ -26,6 +26,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
+/**
+ * Created by Napptuime on 14/04/2015.
+ * This is a helper class that allows us to scale bitmaps
+ */
+
 public class ImgDescriptionActivity extends Activity {
 
     private String groupId;

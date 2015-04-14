@@ -7,6 +7,7 @@ import android.util.TypedValue;
 
 /**
  * Created by SnorriAgust on 14/04/2015.
+ * This helper class allows us to the get the dimensions of the user's device
  */
 public class DeviceDimensionsHelper {
     // DeviceDimensionsHelper.getDisplayWidth(context) => (display width in pixels)

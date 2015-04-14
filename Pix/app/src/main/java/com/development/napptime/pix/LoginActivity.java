@@ -1,9 +1,7 @@
 package com.development.napptime.pix;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,12 +13,9 @@ import com.parse.LogInCallback;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
 
-import java.text.ParseException;
-
 /**
  * Created by Napptime on 2/21/15.
- *
- * Klasinn 
+ * This activity allows the user to log in to the application using his username and password
  *
  */
 

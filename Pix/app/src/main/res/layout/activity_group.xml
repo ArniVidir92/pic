@@ -64,12 +64,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Challenge:        "
+        android:text="Current challenge: "
         android:textColor="@color/darkgray"
         android:id="@+id/textView3"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/button3"
-        android:layout_alignEnd="@+id/button3" />
+        android:layout_alignBottom="@+id/challenge"
+        android:layout_toStartOf="@+id/challenge"
+        android:layout_toLeftOf="@+id/challenge" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -78,9 +78,9 @@
         android:text="Small Text"
         android:textSize="12dp"
         android:id="@+id/challenge"
-        android:layout_below="@+id/textView3"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_alignStart="@+id/textView3" />
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/button3"
+        android:layout_alignEnd="@+id/button3" />
 
 
 </RelativeLayout>

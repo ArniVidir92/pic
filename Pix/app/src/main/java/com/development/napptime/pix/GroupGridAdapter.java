@@ -1,13 +1,16 @@
 package com.development.napptime.pix;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -21,10 +24,12 @@ public class GroupGridAdapter extends BaseAdapter{
     private Context mContext;
     private final String[] groupName;
     private final Bitmap[] images;
-    public GroupGridAdapter(Context c, String[] groupNames, Bitmap[] Imageid) {
+    private final int h;
+    public GroupGridAdapter(Context c, String[] groupNames, Bitmap[] Imageid, int height) {
         mContext = c;
         this.images = Imageid;
         this.groupName = groupNames;
+        this.h = height;
     }
     @Override
     public int getCount() {
@@ -42,19 +47,19 @@ public class GroupGridAdapter extends BaseAdapter{
         return 0;
     }
     @Override
-    public ShadowView getView(int position, View convertView, ViewGroup parent) {
+    public RelativeLayout getView(int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
-        ShadowView grid;
+        RelativeLayout grid;
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            grid = new ShadowView(mContext,null);
-            grid = (ShadowView)inflater.inflate(R.layout.grid_single,null);
+            grid = new RelativeLayout(mContext,null);
+            grid = (RelativeLayout)inflater.inflate(R.layout.grid_single,null);
             TextView textView = (TextView) grid.findViewById(R.id.grid_text);
             ImageView imageView = (ImageView)grid.findViewById(R.id.grid_image);
 
-            imageView.setAdjustViewBounds(false);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView.setAdjustViewBounds(false );
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
 
 
@@ -62,8 +67,10 @@ public class GroupGridAdapter extends BaseAdapter{
             textView.setText(groupName[position]);
             imageView.setImageBitmap(images[position]);
         } else {
-            grid = (ShadowView) convertView;
+            grid = (RelativeLayout) convertView;
         }
+
+        grid.setLayoutParams(new GridView.LayoutParams(GridView.AUTO_FIT, h));
         return grid;
     }
 }

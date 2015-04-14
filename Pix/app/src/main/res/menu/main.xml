@@ -6,5 +6,10 @@
         android:orderInCategory="100"
         android:showAsAction="never">
     </item>
+    <item android:id="@+id/action_newGroup"
+        android:title="New"
+        android:orderInCategory="100"
+        android:showAsAction="always">
+    </item>
 
 </menu>

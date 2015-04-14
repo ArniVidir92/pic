@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
@@ -105,6 +106,11 @@ public class MainActivity extends SuperSettingsActivity implements ActionBar.Tab
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        if (id==R.id.action_newGroup)
+        {
+            Intent i = new Intent( this, CreateGroupActivity.class);
+            startActivity(i);
+        }
 
         return super.onOptionsItemSelected(item);
     }

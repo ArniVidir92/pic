@@ -28,5 +28,6 @@
     <string name="parse_push_key">czKYh8xJNgkx86LmZTL1APShlqXSmw2KQXlKevPd</string>
     <string name="parse_push_val">KpwZwzlwdbIcwpAB9rfCsgTmrrB7UazKTNekBwy3</string>
     <string name="title_activity_choose_group">ChooseGroupActivity</string>
+    <string name="title_activity_img_description">ImgDescriptionActivity</string>
 
 </resources>

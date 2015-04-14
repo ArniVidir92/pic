@@ -8,25 +8,30 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,8 +47,9 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
     private Rect src;
     private Rect bmpRect;
 
-    ArrayList<String> list = new ArrayList<String>();
+    int defaultCameraId;
 
+    ArrayList<String> list = new ArrayList<String>();
 
     private SurfaceHolder holder;
     private SurfaceView surface;
@@ -54,6 +60,7 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             imgPath = extras.getString("imgPath");
+            defaultCameraId = extras.getInt("defaultCameraId");
         }
         setContentView(R.layout.activity_edit_picture);
 
@@ -98,7 +105,6 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
         canvas.drawBitmap(bmp, src, bmpRect, null);
     }
 
-
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Canvas canvas = holder.lockCanvas();
@@ -132,14 +138,6 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
     }
 
     public void changeToGroupSelect(List<ParseObject> groups){
-        File file = new File(imgPath);
-
-        if (file.exists()) {
-            file.delete();
-        } else {
-            System.err.println(
-                    "I cannot find '" + imgPath);
-        }
 
         int n = groups.size();
         String[] groupIds = new String[n];
@@ -154,6 +152,7 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
         Intent myIntent = new Intent(this, ChooseGroupActivity.class);
         myIntent.putExtra("names",groupNames);
         myIntent.putExtra("ids", groupIds);
+        myIntent.putExtra("imgPath", imgPath);
         startActivity(myIntent);
     }
 

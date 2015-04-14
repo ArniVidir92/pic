@@ -17,6 +17,7 @@ public class ChooseGroupActivity extends Activity {
 
     private String[] groupIds;
     private String[] groupNames;
+    private String imgPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class ChooseGroupActivity extends Activity {
     private void fetchExtras(Intent i){
         groupIds = i.getStringArrayExtra("ids");
         groupNames = i.getStringArrayExtra("names");
+        imgPath = i.getStringExtra("imgPath");
     }
 
     private void initListView(String[] names){
@@ -43,7 +45,11 @@ public class ChooseGroupActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                
+                Intent myIntent = new Intent(getApplicationContext(), ImgDescriptionActivity.class);
+                myIntent.putExtra("name",groupNames[position]);
+                myIntent.putExtra("id", groupIds[position]);
+                myIntent.putExtra("imgPath", imgPath);
+                startActivity(myIntent);
             }
         });
     }

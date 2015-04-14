@@ -57,6 +57,9 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
     private SurfaceHolder holder;
     private SurfaceView surface;
 
+    int screenWidth;
+    int screenHeight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,9 +76,13 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
 
         //getGroups();
 
-        bmp = BitmapFactory.decodeFile(imgPath);
+        screenWidth = DeviceDimensionsHelper.getDisplayWidth(this);
+        screenHeight = DeviceDimensionsHelper.getDisplayHeight(this);
 
-        src = new Rect(0,0, bmp.getWidth(), bmp.getHeight());
+        bmp = BitmapFactory.decodeFile(imgPath);
+        bmp = BitmapScaler.scaleToFitHeight(bmp, screenHeight);
+
+        bmp = Utility.rotate(bmp, defaultCameraId);
 
         surface = (SurfaceView) findViewById(R.id.surface);
         holder = surface.getHolder();
@@ -100,6 +107,7 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
         });
 
         //populateSpinnerWidget();
+        uploadPictures();
 
         File file = new File(imgPath);
 
@@ -112,8 +120,10 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
     }
 
     protected void onDraw(Canvas canvas) {
-        canvas.drawColor(Color.BLACK);
+
         bmpRect = new Rect(0,0, canvas.getWidth(), canvas.getHeight());
+        src = new Rect(0,0, bmp.getWidth(), bmp.getHeight());
+
         canvas.drawBitmap(bmp, src, bmpRect, null);
     }
 
@@ -126,11 +136,7 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
         String fileName = "Image-" + dateFormat.format(date) + ".jpg";
         String bigFileName = "Big-" + fileName;
 
-        //Thumbnail
-        Bitmap smallImage = Utility.getResizedBitmap(bmp, 200, 200);
-
-        //Bigger image
-        Bitmap bigImage = Utility.getResizedBitmap(bmp, 500, 500);
+        Bitmap smallImage = BitmapScaler.scaleToFitWidth(bmp, screenWidth/2);
 
         //Store pictures in Documents
         File folder = Environment.getExternalStoragePublicDirectory(
@@ -139,7 +145,7 @@ public class EditPictureActivity extends SuperSettingsActivity implements Surfac
         if (pictureFile.exists()) pictureFile.delete();
 
         // This method uploads both a thumbnail and a big picture
-        uploadToParseCloud(smallImage, bigImage, fileName, bigFileName);
+        uploadToParseCloud(smallImage, bmp, fileName, bigFileName);
 
 
     }

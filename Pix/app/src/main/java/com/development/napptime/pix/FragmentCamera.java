@@ -38,6 +38,9 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
     private SurfaceHolder previewHolder = null;
     private Camera camera = null;
 
+    int screenWidth;
+    int screenHeight;
+
     //Button that lets the user take pictures
     private ImageButton takePicture;
     //Button that lets the user switch between front facing and rear facing cameras
@@ -55,6 +58,9 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_camera, container, false);
         super.onCreate(savedInstanceState);
+
+        screenWidth = DeviceDimensionsHelper.getDisplayWidth(getActivity());
+        screenHeight = DeviceDimensionsHelper.getDisplayHeight(getActivity());
 
         preview = (SurfaceView) view.findViewById(R.id.preview);
 
@@ -254,7 +260,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             //then set the camera as ready
             if (!cameraReady) {
                 Camera.Parameters parameters = camera.getParameters();
-                Camera.Size size = getBestPreviewSize(width, height);
+                Camera.Size size = getBestPreviewSize(screenWidth, screenHeight);
 
                 if (size != null) {
                     parameters.setPreviewSize(size.width, size.height);

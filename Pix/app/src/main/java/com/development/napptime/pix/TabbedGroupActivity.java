@@ -28,7 +28,7 @@ import java.util.Locale;
  *  notandi er í, myndavélina og svæðið þar sem notandi getur fundið nýja hópa.
  */
 
-public class MainActivity extends SuperSettingsActivity implements ActionBar.TabListener {
+public class TabbedGroupActivity extends SuperSettingsActivity implements ActionBar.TabListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -44,6 +44,7 @@ public class MainActivity extends SuperSettingsActivity implements ActionBar.Tab
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+    String groupId = "sr5x4osaBS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class MainActivity extends SuperSettingsActivity implements ActionBar.Tab
         String User = user.getUsername();
         Toast toast = Toast.makeText(getApplicationContext(), User, Toast.LENGTH_SHORT);
         toast.show();
-        Log.d(User,User);
+        Log.d(User, User);
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -124,13 +125,13 @@ public class MainActivity extends SuperSettingsActivity implements ActionBar.Tab
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in
         // the ViewPager.
-    mViewPager.setCurrentItem(tab.getPosition());
+        mViewPager.setCurrentItem(tab.getPosition());
 
         ActionBar actionBar = getActionBar();
 
-    if (tab.getPosition() == 1) {
-        actionBar.hide();
-    } else { actionBar.show(); }
+        if (tab.getPosition() == 1) {
+            actionBar.hide();
+        } else { actionBar.show(); }
     }
 
     @Override
@@ -158,11 +159,11 @@ public class MainActivity extends SuperSettingsActivity implements ActionBar.Tab
             Fragment fragment = null;
             if(position == 0)
             {
-                fragment = new FragmentGroups();
+                fragment = new FragmentMembers();
             }
             else if(position == 1)
             {
-                fragment = new FragmentCamera();
+                fragment = new FragmentPictures();
             }
             else if(position == 2)
             {
@@ -182,11 +183,11 @@ public class MainActivity extends SuperSettingsActivity implements ActionBar.Tab
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
+                    return "MEMBERS";
                 case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
+                    return "PICTURES";
                 case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
+                    return "HALL OF FAME";
             }
             return null;
         }
@@ -219,16 +220,11 @@ public class MainActivity extends SuperSettingsActivity implements ActionBar.Tab
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             return rootView;
         }
     }
 
-    public void switchToGroupActivity(View view)
-    {
-        Intent i = new Intent( MainActivity.this, GroupActivity.class);
-        startActivity(i);
-    }
 
 }

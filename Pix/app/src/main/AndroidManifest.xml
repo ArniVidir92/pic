@@ -10,10 +10,11 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
-    <permission android:protectionLevel="signature"
-        android:name="com.development.napptime.pix.permission.C2D_MESSAGE" />
-    <uses-permission android:name="com.development.napptime.pix.permission.C2D_MESSAGE" />
+    <permission
+        android:name="com.development.napptime.pix.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
 
+    <uses-permission android:name="com.development.napptime.pix.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -59,8 +60,7 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
-        <activity
-            android:name=".EditPictureActivity">
+        <activity android:name=".EditPictureActivity" >
         </activity>
         <activity
             android:name=".SetThemeActivity"
@@ -78,23 +78,27 @@
             android:name=".ChangePasswordActivity"
             android:label="@string/title_activity_change_password" >
         </activity>
+
         <service android:name="com.parse.PushService" />
-        <receiver android:name="com.parse.ParseBroadcastReceiver">
+
+        <receiver android:name="com.parse.ParseBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.parse.ParsePushBroadcastReceiver"
-            android:exported="false">
+        <receiver
+            android:name="com.parse.ParsePushBroadcastReceiver"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.DELETE" />
                 <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.parse.GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND">
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
@@ -102,5 +106,11 @@
                 <category android:name="com.development.napptime.pix" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".TabbedGroupActivity"
+            android:label="@string/title_activity_tabbed_group" >
+        </activity>
     </application>
+
 </manifest>

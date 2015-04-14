@@ -16,7 +16,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -36,6 +35,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by Napptime on 2/10/15.
@@ -46,9 +47,10 @@ import java.util.Date;
 public class FragmentCamera extends Fragment implements Camera.PictureCallback, Camera.ShutterCallback {
 
     private SurfaceView preview = null;
-    private FrameLayout layout = null;
     private SurfaceHolder previewHolder = null;
     private Camera camera = null;
+
+    private final static double epsilon = 0.17;
 
     //Button that lets the user take pictures
     private ImageButton takePicture;
@@ -67,6 +69,28 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_camera, container, false);
         super.onCreate(savedInstanceState);
+
+        preview = (SurfaceView) view.findViewById(R.id.preview);
+
+        //callback so we are notified when the underlying
+        //surface is created and destroyed
+        preview.getHolder().addCallback(surfaceCallback);
+        previewHolder = preview.getHolder();
+        previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
+        //Our buttons
+        takePicture = (ImageButton) view.findViewById(R.id.btnTakePic);
+        switchCamera = (ImageButton) view.findViewById(R.id.btnCameraSwitch);
+
+        //When clicked: take picture
+        takePicture.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                takePicture(view);
+            }
+        });
+
         return view;
     }
 
@@ -88,17 +112,16 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
     public void onResume() {
 
         removeAnimation();
+        getCameraId();
+        switchCamera();
 
-        preview = (SurfaceView) getView().findViewById(R.id.preview);
-        layout = (FrameLayout) getView().findViewById(R.id.layout);
+        super.onResume();
+        camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
+        camera.startPreview();
+        preview.setVisibility(View.VISIBLE);
+    }
 
-        //callback so we are notified when the underlying
-        //surface is created and destroyed
-        preview.getHolder().addCallback(surfaceCallback);
-        previewHolder = preview.getHolder();
-        previewHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
-
+    public void getCameraId() {
         //total number of cameras
         numberOfCameras = Camera.getNumberOfCameras();
 
@@ -110,19 +133,9 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
                 defaultCameraId = i;
             }
         }
+    }
 
-        //Our buttons
-        takePicture = (ImageButton) getView().findViewById(R.id.btnTakePic);
-        switchCamera = (ImageButton) getView().findViewById(R.id.btnCameraSwitch);
-
-        //When clicked: take picture
-        takePicture.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                takePicture(view);
-            }
-        });
+    public void switchCamera() {
 
         //When clicked: switch cameras
         switchCamera.setOnClickListener(new View.OnClickListener() {
@@ -157,10 +170,6 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             }
         });
 
-        super.onResume();
-        camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
-        camera.startPreview();
-        preview.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -263,17 +272,59 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         return resizedBitmap;
     }
 
-    //Get the best previewSize for our device
-    /*
-    private Camera.Size getBestPreviewSize(int w, int h, Camera.Parameters params) {
+    public static Camera.Size getBestPreviewSize(List<Camera.Size> sizes, int screenWidth, int screenHeight) {
+        double aspectRatio = ((double)screenWidth)/screenHeight;
+        Camera.Size optimalSize = null;
+        for (Iterator<Camera.Size> iterator = sizes.iterator(); iterator.hasNext();) {
+            Camera.Size currSize =  iterator.next();
+            double curAspectRatio = ((double)currSize.width)/currSize.height;
+            //do the aspect ratios equal?
+            if ( Math.abs( aspectRatio - curAspectRatio ) < epsilon ) {
+                //they do
+                if(optimalSize!=null) {
+                    //is the current size smaller than the one before
+                    if(optimalSize.height>currSize.height && optimalSize.width>currSize.width) {
+                        optimalSize = currSize;
+                    }
+                } else {
+                    optimalSize = currSize;
+                }
+            }
+        }
+        if(optimalSize == null) {
+            //did not find a size with the correct aspect ratio.. let's choose the smallest instead
+            for (Iterator<Camera.Size> iterator = sizes.iterator(); iterator.hasNext();) {
+                Camera.Size currSize =  iterator.next();
+                if(optimalSize!=null) {
+                    //is the current size smaller than the one before
+                    if(optimalSize.height>currSize.height && optimalSize.width>currSize.width) {
+                        optimalSize = currSize;
+                    } else {
+                        optimalSize = currSize;
+                    }
+                }else {
+                    optimalSize = currSize;
+                }
 
+            }
+        }
+        return optimalSize;
+    }
+
+
+
+
+/*
+    //Get the best previewSize for our device
+    private Camera.Size getBestPreviewSize(int w, int h) {
 
         //Set size of our preview
-
         //float scalingY = 1f;
         //float scalingX = 0.99f;
        // preview.setScaleX(scalingX);
         //preview.setScaleY(scalingY);
+
+        Camera.Parameters params = camera.getParameters();
 
 
         List<Camera.Size> sizes = params.getSupportedPictureSizes();
@@ -311,8 +362,6 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         Log.d("CameraActivity", "targetRatio " + optimalSize);
         return optimalSize;
     }
-    */
-
     private Camera.Size getBestPreviewSize(int width, int height) {
         Camera.Size result=null;
         Camera.Parameters p = camera.getParameters();
@@ -332,7 +381,7 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
         }
         return result;
     }
-
+*/
 
     //Initiate our preview
     private void initPreview(int width, int height) {
@@ -347,13 +396,17 @@ public class FragmentCamera extends Fragment implements Camera.PictureCallback, 
             //then set the camera as ready
             if (!cameraReady) {
                 Camera.Parameters parameters = camera.getParameters();
-                Camera.Size size = getBestPreviewSize(width, height);
+
+                List<Camera.Size> sizes = parameters.getSupportedPictureSizes();
+
+                Camera.Size size = getBestPreviewSize(sizes, width, height);
 
                 if (size != null) {
                     parameters.setPreviewSize(size.width, size.height);
                     camera.setParameters(parameters);
                     cameraReady = true;
                 }
+
             }
         }
     }

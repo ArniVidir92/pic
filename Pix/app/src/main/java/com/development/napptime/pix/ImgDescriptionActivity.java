@@ -98,12 +98,12 @@ public class ImgDescriptionActivity extends Activity {
         // Make thumbnail
         ByteArrayOutputStream streamSmall = new ByteArrayOutputStream();
         // Compress image to lower quality scale 1 - 100§
-        //smallImage.compress(Bitmap.CompressFormat.JPEG, 100, streamSmall);
+        smallImage.compress(Bitmap.CompressFormat.JPEG, 100, streamSmall);
 
         // Make bigger picture which we also store
         ByteArrayOutputStream streamBig = new ByteArrayOutputStream();
         // Compress image to lower quality scale 1 - 100§
-        //bigImage.compress(Bitmap.CompressFormat.JPEG, 100, streamBig);
+        bigImage.compress(Bitmap.CompressFormat.JPEG, 100, streamBig);
 
         byte[] thumbnailPic = streamSmall.toByteArray();
         final byte[] picture = streamBig.toByteArray();
